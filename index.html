@@ -46,9 +46,7 @@
     <button onclick="copyText(text5)">pic2h</button>
     <button onclick="copyText(text6)">v2h</button>
     <button onclick="copyText(text7)">a2h</button>
-    <button onclick="copyText(text8)">fixer</button>
-    <button onclick="copyText(text9)">binbuck</button>
-    <button onclick="copyText(text10)">aggreg</button>
+    
   
     
 
@@ -315,108 +313,9 @@ process_audio_file(r'D:\MSCIT\ds prac\6ch-sound.wav', r'D:\MSCIT\ds prac\HORUSAu
 process_audio_file(r'D:\MSCIT\ds prac\8Ch-sound.wav', r'D:\MSCIT\ds prac\HORUSAudio-8ch.csv', 8) print('=====================================================') print('Audio to HORUS - Done') print('=====================================================') #============================================================
 
         `
-        const text8 = `
-        # Program to Demonstrate Fixers utilities
-import string
-import datetime as dt
-
-# 1. Removing leading and lagging spaces from data entry
-baddata = "  Data Science with too many spaces is bad!!!"
-print('>', baddata, '<')  # Original data with spaces
-cleandata = baddata.strip()
-print('>', cleandata, '<')  # Cleaned data without spaces
-
-# 2. Removing nonprintable characters from data entry
-printable = set(string.printable)
-baddata = "Data\x00science with\x02 funny characters is \x10bad!!!"
-cleandata = "".join(filter(lambda x: x in printable, baddata))
-print('Bad Data: ', baddata)
-print('Clean Data: ', cleandata)
-
-# 3. Reformatting data entry to match specific formatting criteria (convert YYYY-MM-DD to DD Month YYYY)
-baddate = dt.date(2019, 10, 31)
-baddata = format(baddate, '%Y-%m-%d')  # Original date format
-gooddate = dt.datetime.strptime(baddata, '%Y-%m-%d')  # Parse to datetime object
-gooddata = format(gooddate, '%d-%B-%Y')  # Reformat to desired format
-print('Bad Data: ', baddata)
-print('Clean Data: ', gooddata
-
-        `
-        const text9 = `
-        # Data Binning and Bucketing
-import numpy as np
-import matplotlib.mlab as mlab
-import matplotlib.pyplot as plt
-import scipy.stats as stats
-np.random.seed(0)
-#example data
-mu=90#mean of distribution
-sigma=25#sd of deviation
-x=mu+sigma*np.random.randn(5000)
-num_bins=25
-fig,ax=plt.subplots()
-
-#the histogram of the data
-n, bins, patches = ax.hist(x, num_bins, density=1)
-
-#add a best-fit line
-y=stats.norm.pdf(bins,mu,sigma)
-ax.plot(bins,y,'--')
-ax.set_xlabel('Example Data')
-ax.set_ylabel('Probability Density')
-sTitle = r'Histogram '+str(len(x)) + 'entries intro' + str(num_bins) + 'Bins:$\mu=' +str(mu) +'$,$\sigma=' + str(sigma) + '$'
-ax.set_title(sTitle)
-fig.tight_layout()
-sPathFig='C:/Users/NANDINI/OneDrive/Documents/Roshni/Java/Histogram.png'
-fig.savefig(sPathFig)
-plt.show()
-
-        `
-        const text10 = `
-        # Averaging of Data
-import pandas as pd
-
-# Input and Output file paths
-InputFileName = 'C:/Users/NANDINI/OneDrive/Documents/Roshni/Projects/Python_Diwali_Sales_Analysis/Diwali Sales Data.csv'
-OutputFileName = 'C:/Users/NANDINI/OneDrive/Documents/Roshni/Projects/Python_Diwali_Sales_Analysis/Diwali_Sales_Data_Avg.csv'
-
-Base = 'C:/Users/NANDINI'
-print('#################')
-print('Working Base: ', Base, 'using')
-print('#################')
-
-# Use the InputFileName directly since it already contains the full path
-sFileName = InputFileName
-print('Loading: ', sFileName)
-
-# Read the CSV file with specified columns
-IP_DATA_ALL = pd.read_csv(
-    sFileName,
-    header=0,
-    low_memory=False,
-    usecols=['User_ID', 'Cust_name', 'Product_ID', 'Gender'],
-    encoding="latin-1"
-)
-
-# Rename columns for consistency
-IP_DATA_ALL.rename(columns={'Customer Name': 'Cust_name'}, inplace=True)
-
-# Select specific columns
-AllData = IP_DATA_ALL[['User_ID', 'Cust_name', 'Gender']]
-
-# Print all data
-print(AllData)
-
-# Group by 'Country' and 'Place_Name' and calculate the mean of 'Latitude'
-MeanData = AllData.groupby(['User_ID', 'Cust_name'])['Product_ID'].mean()
-
-# Print the grouped mean data
-print(MeanData)
-
-# Optionally save the output to a new file
-MeanData.to_csv(OutputFileName, header=True)
-print('Processed data saved to:', OutputFileName)
-        `
+       
+        
+       
         
 
 
