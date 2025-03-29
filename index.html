@@ -3,995 +3,492 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Copy Text Buttons</title>
-    <style>
-        body {
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        button {
-            margin: 10px;
-            padding: 10px;
-            font-size: 16px;
-            background-color: #ddd;
-            border: 1px solid #aaa;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #ccc;
-        }
-        #copiedMsg {
-            margin-top: 20px;
-            font-weight: bold;
-            color: green;
-        }
-    </style>
+    <title>Fixed Copy to Clipboard</title>
 </head>
 <body>
-    <h1>Copy Text Example</h1>
+    <textarea id="text1" readonly>WSL Installation and Hadoop Setup:
+    
+wsl --install or wsl --install -d ubuntu
+Username = venom, Password = venom
+sudo apt-get update
+sudo apt-get install openjdk-8-jdk
+java -version
+sudo addgroup patkar09
+sudo adduser --ingroup patkar09 venom
+su - venom
+cd ~
+wget https://downloads.apache.org/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz
+tar -xvzf hadoop-3.3.1.tar.gz
+mv hadoop-3.3.1 hadoop
+nano ~/.bashrc
 
-    <!-- Buttons for Datacenter1H&R and Datacenter2H&R -->
-    <button onclick="copyText(text1)">Datacenter1H&R</button>
-    <button onclick="copyText(text2)">Datacenter2H&R</button>
-<button onclick="copyText(text3)">1H&2R</button>
-<button onclick="copyText(text4)">2D1H2R</button>
-    <button onclick="copyText(text5)">scalableSimuln</button>
-    <button onclick="copyText(text6)">TCP</button>
-    <button onclick="copyText(text7)">UDP</button>
- <button onclick="copyText(text8)">readymadeEnviron</button>
+Add the following lines at the end:
+export HADOOP_HOME=~/hadoop
+export PATH=$PATH:$HADOOP_HOME/bin
+export PATH=$PATH:$HADOOP_HOME/sbin
+Save and exit (Ctrl + X, then Y and Enter).
+source ~/.bashrc
+hadoop version
+start-all.sh
+jps</textarea>
+    <button onclick="copyToClipboard('text1', this)">Hadoop Setup</button>
 
-    <p id="copiedMsg"></p>
+    <textarea id="text2" readonly>Java & Hadoop MapReduce Setup:
+    
+java --version
+hadoop version
+su venom16
 
+Create a Text File with Sample Words:
+Hello wordcount MapReduce Hadoop program.
+This is my first MapReduce program
+
+sudo nano Mapreduce.txt
+Write this:
+Hello wordcount MapReduce Hadoop program.
+This is my first MapReduce program
+Save and exit (Ctrl + X, then Y and Enter).
+
+cat Mapreduce.txt
+start-all.sh
+hdfs dfs -put /home/venom16/Mapreduce.txt /
+nano /usr/local/hadoop/etc/hadoop/hadoop-env.sh
+
+Add these lines: and save and exit
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export HADOOP_OPTS="$HADOOP_OPTS -Djava.library.path=$HADOOP_HOME/lib/native"
+
+source ~/.bashrc
+hdfs dfs -put /home/venom16/Mapreduce.txt /
+cd /usr/local/hadoop/share/hadoop/mapreduce 
+hadoop jar hadoop-mapreduce-examples-3.3.1.jar wordcount /Mapreduce.txt /output 
+hdfs dfs -ls /output 
+hdfs dfs -cat /Mapreduce.txt /output/part-r-00000  
+hdfs dfs -head /output/part-r-00000 
+hdfs dfs -mv /output/part-r-00000 /output/outpt.txt 
+hdfs dfs -ls /output 
+hdfs dfs -get /output/outpt.txt /home/venom16 
+ls
+cat output.txt
+hdfs dfs -ls 
+hdfs dfs -cat /output/outpt.txt 
+hdfs dfs -rm /Mapreduce.txt 
+hdfs dfs -rm -r /output</textarea>
+    <button onclick="copyToClipboard('text2', this)">MapReduce</button>
+
+<textarea id="text3" readonly>MongoDB Setup & Operations:
+    
+mongod --version
+python -m pip install pymongo
+
+Creating a Database, Collection and inserting one collection:
+import pymongo 
+client = pymongo.MongoClient("mongodb://localhost:27017/") 
+print(client) 
+mydb = client["BigData"] 
+print(client.list_database_names()) 
+collection = mydb["student"] 
+dictionary = {'name' : 'Roshni' , 'dept' : 'ITCS'} 
+collection.insert_one(dictionary) 
+print(mydb.list_collection_names()) 
+InMongoShell: show dbs
+
+Inserting more collections:
+import pymongo
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+print(client)
+mydb = client["BigData"]
+print(client.list_database_names())
+collection = mydb["student"]
+mylist= [{'name' : 'Omkar' , 'dept' : 'Arts'},
+ {'name' : 'Vedant' , 'dept' : 'BMM'},
+ {'name' : 'Rohit', 'dept' : 'BMS'},
+ {'name' : 'Amey' , 'dept' : 'Commerce'},]
+
+collection.insert_many(mylist)
+print(mydb.list_collection_names())
+Mongoshell: db.student.find().pretty()
+
+To show all collections:
+import pymongo
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+print(client)
+mydb = client["BigData"]
+print(client.list_database_names())
+collection = mydb["student"]
+alldocs=collection.find()
+for item in alldocs:
+ print(item)
+
+To update one collection:
+import pymongo
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+print(client)
+mydb = client["BigData"]
+print(client.list_database_names())
+collection = mydb["student"]
+collection.update_one({'name': 'Amey'},
+ {'$set' : {'dept' : 'Data Science'}})
+alldocs= collection.find()
+for item in alldocs:
+ print(item)
+
+To delete one collection:
+import pymongo
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+print(client)
+mydb = client["BigData"]
+print(client.list_database_names())
+collection = mydb["student"]
+collection.delete_one({'name': 'Amey'})
+
+alldocs= collection.find()
+for item in alldocs:
+ print(item)</textarea>
+    <button onclick="copyToClipboard('text3', this)">MongoDB</button>
+
+<textarea id="text4" readonly>Pig Setup & Processing:
+    
+java --version
+su venom16
+sudo service ssh restart 
+ssh localhost 
+start-all.sh 
+cd /home/venom16 
+sudo nano sample.txt 
+
+Add following details in the sample.txt: (comma separated values)  
+1,Rasika,20000,Lecturer  
+2,Hrishi,25000,Accountant  
+3,Rahul,30000,SoftwareEngineer 
+Save “Ctrl S” and exit the file by pressing “Ctrl X 
+
+cd /usr/local 
+sudo wget https://downloads.apache.org/pig/pig-0.17.0/pig-0.17.0.tar.gz 
+sudo tar -xvzf pig-0.17.0.tar.gz
+ls
+sudo mv pig-0.17.0 pig 
+ls -l 
+sudo chmod 777 pig 
+
+cd /home/hduser1 
+nano .bashrc 
+Append the following Pig environment variables:
+export PATH=$PATH:$HADOOP_HOME/bin  
+export PATH=$PATH:$HADOOP_HOME/sbin  
+export PATH=$PATH:/usr/local/pig/bin  
+export PIG_HOME=/usr/local/pig  
+export PIG_CLASSPATH=/usr/local/hadoop/etc/hadoop  
+save and exit, then source .bashrc  
+pig -version  
+pig -x local
+quit
+pig
+pig -x local
+Employees = LOAD ‘sample.txt’ USING PigStorage(‘,’) as (id:int, firstname:chararray,salary:int, Dept:chararray);  
+Dump Employees;</textarea>
+    <button onclick="copyToClipboard('text4', this)">Pig</button>
+
+<textarea id="text5" readonly>Hive Setup & Processing:
+    
+java --version
+hadoop version
+sudo service ssh restart  
+ssh localhost  
+start-all.sh 
+cd /home/venom16  
+sudo nano sample.txt  
+
+Add following details in the sample.txt:
+1 Rasika 20000 Lecturer  
+2 Hrishi 25000 Accountant  
+3 Rahul 30000 SoftwareEngineer 
+Save and exit (Ctrl + X, then Y and Enter). 
+
+cd /usr/local  
+sudo wget https://downloads.apache.org/hive/hive-3.1.2/apache-hive-3.1.2-bin.tar.gz
+sudo tar -xvzf apache-hive-3.1.2-bin.tar.gz 
+ls
+sudo mv apache-hive-3.1.2-bin hive 
+ls
+sudo chmod 777 hive  
+cd /home/hduser1 
+nano .bashrc
+
+Append the following Hive environment variables to the .bashrc file:  
+export HIVE_HOME=/usr/local/hive  
+export PATH=$PATH:$HIVE_HOME/bin  
+Save and exit, then source .bashrc
+
+Edit hive-config.sh file:
+cd /usr/local/hive/bin
+sudo nano hive-config.sh
+
+Add the following line to hive-config.sh: 
+export HADOOP_HOME=/usr/local/hadoop.
+
+hdfs dfs -mkdir /tmp 
+hdfs dfs -chmod g+w /tmp
+hdfs dfs -ls /
+hdfs dfs -mkdir -p /user/hive/warehouse  
+hdfs dfs -chmod g+w /user/hive/warehouse 
+hdfs dfs -ls /user/hive
+
+/usr/local/hive/bin/schematool -initSchema -dbType derby  
+
+To fix Guava incompatibility:
+ls $HIVE_HOME/lib  
+ls $HADOOP_HOME/share/hadoop/hdfs/lib
+sudo rm /usr/local/hive/lib/guava-19.0.jar 
+sudo cp $HADOOP_HOME/share/hadoop/common/lib/guava-27.0-jre.jar /usr/local/hive/lib/ 
+/usr/local/hive/bin/schematool -initSchema -dbType derby  
+
+cd $HIVE_HOME  
+hive 
+show tables
+
+CREATE TABLE IF NOT EXISTS employee ( eid int, name String, salary String, designation String) 
+COMMENT ‘Employee details’; 
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ' ' 
+LINES TERMINATED BY '\n' 
+STORED AS TEXTFILE; 
+
+LOAD DATA LOCAL INPATH “/home/hduser1/sample.txt” OVERWRITE INTO TABLE employee; 
+SELECT * FROM employee;
+QUIT;</textarea>
+    <button onclick="copyToClipboard('text5', this)">Hive</button>
+
+<textarea id="text6" readonly>Decision Tree Classifier:
+
+# Importing Required Libraries
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier  # Import Decision Tree Classifier
+from sklearn.model_selection import train_test_split  # Import train_test_split function
+from sklearn import metrics  # Import sklearn metrics module for accuracy calculation
+
+# Loading Data
+col_names = ['pregnant', 'glucose', 'bp', 'skin', 'insulin', 'bmi', 'pedigree', 'age', 'label']
+# Load dataset
+pima = pd.read_csv("diabetes.csv", names=col_names, header=1)
+print(pima.head())  # Display the first 5 rows
+
+# Feature Selection
+# Split dataset into features and target variable
+feature_cols = ['pregnant', 'insulin', 'bmi', 'age', 'glucose', 'bp', 'pedigree']
+X = pima[feature_cols]  # Features
+y = pima['label']  # Target variable
+
+# Splitting Dataset
+# Split dataset into training set and test set (70% training, 30% testing)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+
+# Building Decision Tree Model
+# Create Decision Tree classifier object
+clf = DecisionTreeClassifier()
+# Train Decision Tree Classifier
+clf.fit(X_train, y_train)
+# Predict the response for the test dataset
+y_pred = clf.predict(X_test)
+
+# Evaluating Model
+print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
+
+# Visualizing Decision Tree
+from sklearn.tree import export_graphviz
+from six import StringIO
+from IPython.display import Image
+import pydotplus
+
+# Generate decision tree visualization
+dot_data = StringIO()
+export_graphviz(clf, out_file=dot_data, filled=True, rounded=True, special_characters=True,
+                feature_names=feature_cols, class_names=['0', '1'])
+graph = pydotplus.graph_from_dot_data(dot_data.getvalue())
+graph.write_png('diabetes.png')
+Image(graph.create_png())</textarea>
+    <button onclick="copyToClipboard('text6', this)">DecisionTree</button>
+
+<textarea id="text7" readonly>SVM Classifier:
+
+# Importing required libraries
+from sklearn import svm, datasets
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+
+# Load dataset
+iris = datasets.load_iris()
+X = iris.data[:, :2]  # Taking only the first two features
+y = iris.target
+
+# Splitting dataset into training and test sets
+x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
+
+# Creating and training SVM classifier
+clf = svm.SVC(kernel='linear', C=1)
+clf.fit(x_train, y_train)
+
+# Making predictions
+classifier_predictions = clf.predict(x_test)
+
+# Evaluating accuracy
+print("Accuracy:", accuracy_score(y_test, classifier_predictions) * 100)
+</textarea>
+    <button onclick="copyToClipboard('text7', this)">SVM</button>
+
+<textarea id="text8" readonly>Admission Prediction using Logistic Regression:
+
+# Importing required libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Loading dataset
+student_data = pd.read_csv("Admission_P1A.csv")
+
+# Print first ten records
+print(student_data.head(10))
+
+# Splitting dataset
+feature_cols = ['gre', 'gpa', 'rank']
+X = student_data[feature_cols]
+Y = student_data['admit']
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=1)
+
+from sklearn.linear_model import LogisticRegression
+clf = LogisticRegression()
+clf.fit(X_train, Y_train)
+
+Y_pred = clf.predict(X_test)
+
+from sklearn import metrics
+print("Accuracy:", round(metrics.accuracy_score(Y_test, Y_pred), 2) * 100, "%")
+</textarea>
+    <button onclick="copyToClipboard('text8', this)">LogisticRegression</button>
+
+    <textarea id="text9" readonly>Linear Regression for Admission Prediction:
+
+# Importing necessary libraries
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+
+# Load dataset
+df = pd.read_csv("Admission_Predict.csv")
+
+# Data Preprocessing
+df.columns = df.columns.str.strip().str.lower().str.replace(' ', '_')
+X = df[['gre_score']]
+y = df['chance_of_admit']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+
+# Train Model
+model = LinearRegression()
+model.fit(X_train, y_train)
+print("Intercept:", model.intercept_)
+print("Coefficient:", model.coef_[0])
+</textarea>
+    <button onclick="copyToClipboard('text9', this)">LinearRegression</button>
+
+<textarea id="text10" readonly>import numpy as np
+import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+
+# Load Dataset
+df = pd.read_csv('spam.csv', encoding='latin-1')
+
+# Keep only necessary columns
+df = df[['v2', 'v1']]
+
+# Rename columns
+df.columns = ['SMS', 'Type']
+
+# Instantiate count vectorizer
+countvec = CountVectorizer(
+    ngram_range=(1, 4),
+    stop_words='english',
+    strip_accents='unicode',
+    max_features=1000
+)
+
+# Create bag of words
+bow = countvec.fit_transform(df['SMS'])
+
+# Prepare training data
+X_train = bow.toarray()
+y_train = df['Type'].values
+
+# Instantiate classifier
+mnb = MultinomialNB()
+
+# Train the classifier
+mnb.fit(X_train, y_train)
+
+# Testing
+text = countvec.transform(['Free gifts for all'])
+print(mnb.predict(text))
+</textarea>
+    <button onclick="copyToClipboard('text10', this)">Classifier</button>
+
+ <textarea id="text11" readonly># Import statements
+from sklearn.datasets import make_blobs
+from sklearn.cluster import KMeans  # Import KMeans
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Create blobs
+data = make_blobs(n_samples=400, n_features=2, centers=4, cluster_std=1.6, random_state=50)
+
+# Create np array for data points
+points = data[0]
+
+# Create scatter plot of original data
+plt.scatter(points[:, 0], points[:, 1], c=data[1], cmap='viridis', alpha=0.5)
+plt.xlim(-15, 15)
+plt.ylim(-15, 15)
+plt.title("Original Data Distribution")
+plt.show()
+
+# Apply K-Means Clustering
+kmeans = KMeans(n_clusters=4, random_state=42)
+y_km = kmeans.fit_predict(points)
+
+# Visualize the Clusters
+plt.scatter(points[y_km == 0, 0], points[y_km == 0, 1], s=100, c='red', label="Cluster 1")
+plt.scatter(points[y_km == 1, 0], points[y_km == 1, 1], s=100, c='blue', label="Cluster 2")
+plt.scatter(points[y_km == 2, 0], points[y_km == 2, 1], s=100, c='grey', label="Cluster 3")
+plt.scatter(points[y_km == 3, 0], points[y_km == 3, 1], s=100, c='green', label="Cluster 4")
+
+# Plot cluster centers
+plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], 
+            s=200, color='yellow', marker="*", edgecolors='black", label="Centroids")
+
+plt.xlim(-15, 15)
+plt.ylim(-15, 15)
+plt.legend()
+plt.title("K-Means Clustering")
+plt.show()
+</textarea>
+    <button onclick="copyToClipboard('text11', this)">Clustering</button>
     <script>
-        // Code block for Button 1 (Datacenter1H&R)
-        const text1 = `
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
-import org.cloudbus.cloudsim.*;
-
-public class CloudSimExample1 {
-    private static List<Cloudlet> cloudletlist;
-    private static List<Vm> vmlist;
-
-    public static void main(String[] args) {
-        Log.printLine("Starting CloudSimExample1...");
-        try {
-            int num_user = 1;
-            Calendar calendar = Calendar.getInstance();
-            Boolean trace_flag = false;
-            CloudSim.init(num_user, calendar, trace_flag);
-
-            Datacenter datacenter0 = createDatacenter("Datacenter_0");
-
-            DatacenterBroker broker = createBroker();
-            int brokerId = broker.getId();
-
-            vmlist = new ArrayList<>();
-            int vmid = 0;
-            int mips = 1000;
-            long size = 10000;
-            int ram = 512;
-            long bw = 1000;
-            int pesNumber = 1;
-            String vmm = "Xen";
-
-            Vm vm1 = new Vm(vmid++, brokerId, mips, pesNumber, ram, bw, size, vmm, new CloudletSchedulerTimeShared());
-            Vm vm2 = new Vm(vmid++, brokerId, mips / 2, pesNumber, ram - 256, bw, size * 3, vmm, new CloudletSchedulerTimeShared());
-
-            vmlist.add(vm1);
-            vmlist.add(vm2);
-
-            broker.submitVmList(vmlist);
-
-            cloudletlist = new ArrayList<>();
-            long length = 400000;
-            long fileSize = 300;
-            long outputSize = 300;
-            UtilizationModel utilizationModel = new UtilizationModelFull();
-
-            Cloudlet cloudlet1 = new Cloudlet(0, length, pesNumber, fileSize, outputSize, utilizationModel, utilizationModel, utilizationModel);
-            cloudlet1.setUserId(brokerId);
-
-            cloudletlist.add(cloudlet1);
-
-            broker.submitCloudletList(cloudletlist);
-
-            CloudSim.startSimulation();
-            CloudSim.stopSimulation();
-
-            List<Cloudlet> newList = broker.getCloudletReceivedList();
-            printCloudletList(newList);
-
-            Log.printLine("CloudSimExample1 finished!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.printLine("Unwanted errors happen");
-        }
-    }
-
-    private static Datacenter createDatacenter(String name) {
-        List<Host> hostList = new ArrayList<>();
-        List<Pe> peList = new ArrayList<>();
-        int mips = 1000;
-
-        peList.add(new Pe(0, new PeProvisionerSimple(mips)));
-
-        int hostId = 0;
-        int ram = 2048;
-        long storage = 1000000;
-        int bw = 10000;
-
-        hostList.add(new Host(hostId, new RamProvisionerSimple(ram), new BwProvisionerSimple(bw), storage, peList, new VmSchedulerTimeShared(peList)));
-
-        String arch = "x86";
-        String os = "Linux";
-        String vmm = "Xen";
-        double time_zone = 10.0;
-        double cost = 3.0;
-
-        LinkedList<Storage> storageList = new LinkedList<>();
-        DatacenterCharacteristics characteristics = new DatacenterCharacteristics(arch, os, vmm, hostList, time_zone, cost, 0.05, 0.001, 0.0);
-
-        Datacenter datacenter = null;
-        try {
-            datacenter = new Datacenter(name, characteristics, new VmAllocationPolicySimple(hostList), storageList, 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return datacenter;
-    }
-
-    private static DatacenterBroker createBroker() {
-        DatacenterBroker broker = null;
-        try {
-            broker = new DatacenterBroker("Broker");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return broker;
-    }
-
-    private static void printCloudletList(List<Cloudlet> list) {
-        for (Cloudlet cloudlet : list) {
-            Log.printLine("Cloudlet ID: " + cloudlet.getCloudletId() + " STATUS: " + cloudlet.getCloudletStatus());
-        }
-    }
-}
-        `;
-
-        // Code block for Button 2 (Datacenter2H&R)
-        const text2 = `
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.cloudbus.cloudsim.*;
-
-public class CloudSimExample2 {
-    private static List<Cloudlet> cloudletList;
-    private static List<Vm> vmList;
-
-    public static void main(String[] args) {
-        Log.printLine("Starting CloudSimExample2...");
-
-        try {
-            // Initialize CloudSim
-            int numUsers = 1; 
-            Calendar calendar = Calendar.getInstance();
-            boolean traceFlag = false;
-
-            CloudSim.init(numUsers, calendar, traceFlag);
-
-            // Create Datacenter
-            Datacenter datacenter = createDatacenter("Datacenter_1");
-
-            // Create Broker
-            DatacenterBroker broker = createBroker();
-            int brokerId = broker.getId();
-
-            // Create VMs
-            vmList = new ArrayList<>();
-            int vmid = 0;
-            int mips = 1000;
-            long size = 10000; // Image size (MB)
-            int ram = 512; // VM memory (MB)
-            long bw = 1000;
-            int pesNumber = 1;
-            String vmm = "Xen";
-
-            Vm vm = new Vm(vmid, brokerId, mips, pesNumber, ram, bw, size, vmm, new CloudletSchedulerTimeShared());
-            vmList.add(vm);
-            broker.submitVmList(vmList);
-
-            // Create Cloudlets
-            cloudletList = new ArrayList<>();
-            long length = 40000;
-            long fileSize = 300;
-            long outputSize = 300;
-            UtilizationModel utilizationModel = new UtilizationModelFull();
-
-            Cloudlet cloudlet = new Cloudlet(0, length, pesNumber, fileSize, outputSize, utilizationModel, utilizationModel, utilizationModel);
-            cloudlet.setUserId(brokerId);
-            cloudletList.add(cloudlet);
-
-            broker.submitCloudletList(cloudletList);
-
-            // Start simulation
-            CloudSim.startSimulation();
-            List<Cloudlet> newList = broker.getCloudletReceivedList();
-            CloudSim.stopSimulation();
-
-            printCloudletList(newList);
-
-            Log.printLine("CloudSimExample2 finished!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.printLine("Simulation terminated due to unexpected error.");
-        }
-    }
-
-    private static Datacenter createDatacenter(String name) {
-        List<Host> hostList = new ArrayList<>();
-
-        // Create CPU cores (PEs)
-        List<Pe> peList = new ArrayList<>();
-        int mips = 1000;
-        peList.add(new Pe(0, new PeProvisionerSimple(mips)));
-
-        // Create a host
-        int hostId = 0;
-        int ram = 2048; // Host memory (MB)
-        long storage = 1000000; // Host storage
-        int bw = 10000;
-
-        hostList.add(new Host(hostId, new RamProvisionerSimple(ram), new BwProvisionerSimple(bw), storage, peList, new VmSchedulerTimeShared(peList)));
-
-        String arch = "x86";
-        String os = "Linux";
-        String vmm = "Xen";
-        double timeZone = 10.0;
-        double cost = 3.0;
-
-        LinkedList<Storage> storageList = new LinkedList<>();
-        DatacenterCharacteristics characteristics = new DatacenterCharacteristics(arch, os, vmm, hostList, timeZone, cost, 0.05, 0.001, 0.0);
-
-        Datacenter datacenter = null;
-        try {
-            datacenter = new Datacenter(name, characteristics, new VmAllocationPolicySimple(hostList), storageList, 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return datacenter;
-    }
-
-    private static DatacenterBroker createBroker() {
-        DatacenterBroker broker = null;
-        try {
-            broker = new DatacenterBroker("Broker");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return broker;
-    }
-
-    private static void printCloudletList(List<Cloudlet> list) {
-        Log.printLine("========== OUTPUT ==========");
-        for (Cloudlet cloudlet : list) {
-            Log.printLine("Cloudlet ID: " + cloudlet.getCloudletId() + " STATUS: " + cloudlet.getCloudletStatus());
-        }
-    }
-}
-        `;
-
-	const text3 = `
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.cloudbus.cloudsim.*;
-
-public class CloudSimExample3 {
-    private static List<Cloudlet> cloudletList;
-    private static List<Vm> vmList;
-
-    public static void main(String[] args) {
-        Log.printLine("Starting CloudSimExample3...");
-
-        try {
-            // Initialize CloudSim
-            int numUsers = 1;
-            Calendar calendar = Calendar.getInstance();
-            boolean traceFlag = false;
-
-            CloudSim.init(numUsers, calendar, traceFlag);
-
-            // Create Datacenter
-            Datacenter datacenter = createDatacenter("Datacenter_1H2R");
-
-            // Create Broker
-            DatacenterBroker broker = createBroker();
-            int brokerId = broker.getId();
-
-            // Create VMs
-            vmList = new ArrayList<>();
-            int vmid = 0;
-            int mips = 1000;
-            long size = 10000; // Image size (MB)
-            int ram = 2048;    // VM memory (MB)
-            long bw = 1000;
-            int pesNumber = 2; // 2 resources
-            String vmm = "Xen";
-
-            Vm vm = new Vm(vmid, brokerId, mips, pesNumber, ram, bw, size, vmm, new CloudletSchedulerTimeShared());
-            vmList.add(vm);
-            broker.submitVmList(vmList);
-
-            // Create Cloudlets
-            cloudletList = new ArrayList<>();
-            long length = 40000;
-            long fileSize = 300;
-            long outputSize = 300;
-            UtilizationModel utilizationModel = new UtilizationModelFull();
-
-            Cloudlet cloudlet = new Cloudlet(0, length, pesNumber, fileSize, outputSize, utilizationModel, utilizationModel, utilizationModel);
-            cloudlet.setUserId(brokerId);
-            cloudletList.add(cloudlet);
-
-            broker.submitCloudletList(cloudletList);
-
-            // Start simulation
-            CloudSim.startSimulation();
-            List<Cloudlet> newList = broker.getCloudletReceivedList();
-            CloudSim.stopSimulation();
-
-            printCloudletList(newList);
-
-            Log.printLine("CloudSimExample3 finished!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.printLine("Simulation terminated due to unexpected error.");
-        }
-    }
-
-    private static Datacenter createDatacenter(String name) {
-        List<Host> hostList = new ArrayList<>();
-
-        // Create CPU cores (PEs)
-        List<Pe> peList = new ArrayList<>();
-        int mips = 1000;
-        peList.add(new Pe(0, new PeProvisionerSimple(mips)));
-        peList.add(new Pe(1, new PeProvisionerSimple(mips)));
-
-        // Create a host
-        int hostId = 0;
-        int ram = 2048; // Host memory (MB)
-        long storage = 1000000; // Host storage
-        int bw = 10000;
-
-        hostList.add(new Host(hostId, new RamProvisionerSimple(ram), new BwProvisionerSimple(bw), storage, peList, new VmSchedulerTimeShared(peList)));
-
-        String arch = "x86";
-        String os = "Linux";
-        String vmm = "Xen";
-        double timeZone = 10.0;
-        double cost = 3.0;
-
-        LinkedList<Storage> storageList = new LinkedList<>();
-        DatacenterCharacteristics characteristics = new DatacenterCharacteristics(arch, os, vmm, hostList, timeZone, cost, 0.05, 0.001, 0.0);
-
-        Datacenter datacenter = null;
-        try {
-            datacenter = new Datacenter(name, characteristics, new VmAllocationPolicySimple(hostList), storageList, 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return datacenter;
-    }
-
-    private static DatacenterBroker createBroker() {
-        DatacenterBroker broker = null;
-        try {
-            broker = new DatacenterBroker("Broker");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return broker;
-    }
-
-    private static void printCloudletList(List<Cloudlet> list) {
-        Log.printLine("========== OUTPUT ==========");
-        for (Cloudlet cloudlet : list) {
-            Log.printLine("Cloudlet ID: " + cloudlet.getCloudletId() + " STATUS: " + cloudlet.getCloudletStatus());
-        }
-    }
-}
-        `;
-
-	const text4 = `
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.cloudbus.cloudsim.*;
-
-public class CloudSimExample4 {
-    private static List<Cloudlet> cloudletList;
-    private static List<Vm> vmList;
-
-    public static void main(String[] args) {
-        Log.printLine("Starting CloudSimExample4...");
-
-        try {
-            // Initialize CloudSim
-            int numUsers = 1;
-            Calendar calendar = Calendar.getInstance();
-            boolean traceFlag = false;
-
-            CloudSim.init(numUsers, calendar, traceFlag);
-
-            // Create Datacenters
-            Datacenter datacenter1 = createDatacenter("Datacenter_1");
-            Datacenter datacenter2 = createDatacenter("Datacenter_2");
-
-            // Create Broker
-            DatacenterBroker broker = createBroker();
-            int brokerId = broker.getId();
-
-            // Create VMs
-            vmList = new ArrayList<>();
-            int vmid = 0;
-            int mips = 1000;
-            long size = 10000; // Image size (MB)
-            int ram = 2048;    // VM memory (MB)
-            long bw = 1000;
-            int pesNumber = 2; // 2 resources
-            String vmm = "Xen";
-
-            Vm vm1 = new Vm(vmid++, brokerId, mips, pesNumber, ram, bw, size, vmm, new CloudletSchedulerTimeShared());
-            vmList.add(vm1);
-
-            broker.submitVmList(vmList);
-
-            // Create Cloudlets
-            cloudletList = new ArrayList<>();
-            long length = 40000;
-            long fileSize = 300;
-            long outputSize = 300;
-            UtilizationModel utilizationModel = new UtilizationModelFull();
-
-            Cloudlet cloudlet = new Cloudlet(0, length, pesNumber, fileSize, outputSize, utilizationModel, utilizationModel, utilizationModel);
-            cloudlet.setUserId(brokerId);
-            cloudletList.add(cloudlet);
-
-            broker.submitCloudletList(cloudletList);
-
-            // Start simulation
-            CloudSim.startSimulation();
-            List<Cloudlet> newList = broker.getCloudletReceivedList();
-            CloudSim.stopSimulation();
-
-            printCloudletList(newList);
-
-            Log.printLine("CloudSimExample4 finished!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.printLine("Simulation terminated due to unexpected error.");
-        }
-    }
-
-    private static Datacenter createDatacenter(String name) {
-        List<Host> hostList = new ArrayList<>();
-
-        // Create CPU cores (PEs)
-        List<Pe> peList = new ArrayList<>();
-        int mips = 1000;
-        peList.add(new Pe(0, new PeProvisionerSimple(mips)));
-        peList.add(new Pe(1, new PeProvisionerSimple(mips)));
-
-        // Create a host
-        int hostId = 0;
-        int ram = 2048; // Host memory (MB)
-        long storage = 1000000; // Host storage
-        int bw = 10000;
-
-        hostList.add(new Host(hostId, new RamProvisionerSimple(ram), new BwProvisionerSimple(bw), storage, peList, new VmSchedulerTimeShared(peList)));
-
-        String arch = "x86";
-        String os = "Linux";
-        String vmm = "Xen";
-        double timeZone = 10.0;
-        double cost = 3.0;
-
-        LinkedList<Storage> storageList = new LinkedList<>();
-        DatacenterCharacteristics characteristics = new DatacenterCharacteristics(arch, os, vmm, hostList, timeZone, cost, 0.05, 0.001, 0.0);
-
-        Datacenter datacenter = null;
-        try {
-            datacenter = new Datacenter(name, characteristics, new VmAllocationPolicySimple(hostList), storageList, 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return datacenter;
-    }
-
-    private static DatacenterBroker createBroker() {
-        DatacenterBroker broker = null;
-        try {
-            broker = new DatacenterBroker("Broker");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return broker;
-    }
-
-    private static void printCloudletList(List<Cloudlet> list) {
-        Log.printLine("========== OUTPUT ==========");
-        for (Cloudlet cloudlet : list) {
-            Log.printLine("Cloudlet ID: " + cloudlet.getCloudletId() + " STATUS: " + cloudlet.getCloudletStatus());
-        }
-    }
-}
-        `;
-
-	const text5 = `
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.cloudbus.cloudsim.*;
-
-public class CloudSimExample5 {
-    private static List<Cloudlet> cloudletList;
-    private static List<Vm> vmList;
-
-    public static void main(String[] args) {
-        Log.printLine("Starting CloudSimExample5...");
-
-        try {
-            // Initialize CloudSim
-            int numUsers = 10; // Scaled to simulate multiple users
-            Calendar calendar = Calendar.getInstance();
-            boolean traceFlag = false;
-
-            CloudSim.init(numUsers, calendar, traceFlag);
-
-            // Create multiple Datacenters for scalability
-            Datacenter datacenter1 = createDatacenter("Datacenter_1");
-            Datacenter datacenter2 = createDatacenter("Datacenter_2");
-            Datacenter datacenter3 = createDatacenter("Datacenter_3");
-
-            // Create Broker
-            DatacenterBroker broker = createBroker();
-            int brokerId = broker.getId();
-
-            // Create multiple VMs
-            vmList = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
-                int vmid = i;
-                int mips = 1000;
-                long size = 10000; // Image size (MB)
-                int ram = 2048;    // VM memory (MB)
-                long bw = 1000;
-                int pesNumber = 1; // Number of resources
-                String vmm = "Xen";
-
-                Vm vm = new Vm(vmid, brokerId, mips, pesNumber, ram, bw, size, vmm, new CloudletSchedulerTimeShared());
-                vmList.add(vm);
-            }
-            broker.submitVmList(vmList);
-
-            // Create multiple Cloudlets
-            cloudletList = new ArrayList<>();
-            for (int i = 0; i < 20; i++) {
-                int cloudletId = i;
-                long length = 50000;
-                long fileSize = 300;
-                long outputSize = 300;
-                UtilizationModel utilizationModel = new UtilizationModelFull();
-
-                Cloudlet cloudlet = new Cloudlet(cloudletId, length, 1, fileSize, outputSize, utilizationModel, utilizationModel, utilizationModel);
-                cloudlet.setUserId(brokerId);
-                cloudletList.add(cloudlet);
-            }
-            broker.submitCloudletList(cloudletList);
-
-            // Start simulation
-            CloudSim.startSimulation();
-            List<Cloudlet> newList = broker.getCloudletReceivedList();
-            CloudSim.stopSimulation();
-
-            printCloudletList(newList);
-
-            Log.printLine("CloudSimExample5 finished!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.printLine("Simulation terminated due to unexpected error.");
-        }
-    }
-
-    private static Datacenter createDatacenter(String name) {
-        List<Host> hostList = new ArrayList<>();
-
-        // Create multiple hosts with CPU cores (PEs)
-        for (int i = 0; i < 5; i++) {
-            List<Pe> peList = new ArrayList<>();
-            int mips = 1000;
-            for (int j = 0; j < 2; j++) {
-                peList.add(new Pe(j, new PeProvisionerSimple(mips)));
-            }
-
-            int hostId = i;
-            int ram = 8192; // Host memory (MB)
-            long storage = 1000000; // Host storage
-            int bw = 10000;
-
-            Host host = new Host(hostId, new RamProvisionerSimple(ram), new BwProvisionerSimple(bw), storage, peList, new VmSchedulerTimeShared(peList));
-            hostList.add(host);
-        }
-
-        String arch = "x86";
-        String os = "Linux";
-        String vmm = "Xen";
-        double timeZone = 10.0;
-        double cost = 3.0;
-
-        LinkedList<Storage> storageList = new LinkedList<>();
-        DatacenterCharacteristics characteristics = new DatacenterCharacteristics(arch, os, vmm, hostList, timeZone, cost, 0.05, 0.001, 0.0);
-
-        Datacenter datacenter = null;
-        try {
-            datacenter = new Datacenter(name, characteristics, new VmAllocationPolicySimple(hostList), storageList, 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return datacenter;
-    }
-
-    private static DatacenterBroker createBroker() {
-        DatacenterBroker broker = null;
-        try {
-            broker = new DatacenterBroker("Broker");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return broker;
-    }
-
-    private static void printCloudletList(List<Cloudlet> list) {
-        Log.printLine("========== OUTPUT ==========");
-        for (Cloudlet cloudlet : list) {
-            Log.printLine("Cloudlet ID: " + cloudlet.getCloudletId() + " STATUS: " + cloudlet.getCloudletStatus());
-        }
-    }
-}
-        `;
-	
-	
-        // Code block for Button 6 (TCP)
-        const text6 = `
-# TCPClient.java
-import java.io.*;
-import java.net.*;
-
-class TCPClient {
-    public static void main(String[] args) {
-        try (
-            // Set up user input and connection to the server
-            BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
-            Socket clientSocket = new Socket("localhost", 6789);
-            DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
-            BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))
-        ) {
-            // Read a line from the user
-            System.out.print("Enter a sentence: ");
-            String sentence = inFromUser.readLine();
-
-            // Send the line to the server
-            outToServer.writeBytes(sentence + '\\n');
-
-            // Read the response from the server
-            String modifiedSentence = inFromServer.readLine();
-            System.out.println("FROM SERVER: " + modifiedSentence);
-        } catch (IOException e) {
-            System.err.println("Error in client communication: " + e.getMessage());
-        }
-    }
-}
-
-# TCPServer.java
-import java.io.*;
-import java.net.*;
-
-class TCPServer {
-    public static void main(String[] args) {
-        try (ServerSocket welcomeSocket = new ServerSocket(6789)) {
-            System.out.println("Server is listening on port 6789");
-
-            while (true) {
-                try {
-                    // Accept a new client connection
-                    Socket connectionSocket = welcomeSocket.accept();
-                    System.out.println("Client connected: " + connectionSocket.getInetAddress());
-
-                    // Handle the client in a new thread
-                    new Thread(new ClientHandler(connectionSocket)).start();
-                } catch (IOException e) {
-                    System.err.println("Error accepting client connection: " + e.getMessage());
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Error starting server: " + e.getMessage());
-        }
-    }
-}
-
-class ClientHandler implements Runnable {
-    private final Socket connectionSocket;
-
-    public ClientHandler(Socket socket) {
-        this.connectionSocket = socket;
-    }
-
-    @Override
-    public void run() {
-        try (
-            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-            DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream())
-        ) {
-            String clientSentence = inFromClient.readLine();
-            if (clientSentence != null) {
-                String capitalizedSentence = clientSentence.toUpperCase() + '\\n';
-                outToClient.writeBytes(capitalizedSentence);
-            }
-        } catch (IOException e) {
-            System.err.println("Error handling client connection: " + e.getMessage());
-        } finally {
-            try {
-                connectionSocket.close();
-            } catch (IOException e) {
-                System.err.println("Error closing socket: " + e.getMessage());
-            }
-        }
-    }
-}
-        `;
-
-	
-	 const text7 = `
-# UDPClient.java
-import java.io.*;
-import java.net.*;
-
-class UDPClient {
-    public static void main(String[] args) {
-        try (DatagramSocket clientSocket = new DatagramSocket()) {
-            InetAddress serverIPAddress = InetAddress.getByName("localhost");
-            byte[] sendData;
-            byte[] receiveData = new byte[1024];
-
-            // User input
-            BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
-            System.out.print("Enter a sentence: ");
-            String sentence = inFromUser.readLine();
-            sendData = sentence.getBytes();
-
-            // Send data to server
-            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, serverIPAddress, 9876);
-            clientSocket.send(sendPacket);
-
-            // Receive response from server
-            DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-            clientSocket.receive(receivePacket);
-
-            String modifiedSentence = new String(receivePacket.getData(), 0, receivePacket.getLength());
-            System.out.println("FROM SERVER: " + modifiedSentence);
-        } catch (IOException e) {
-            System.err.println("Error in UDP Client: " + e.getMessage());
-        }
-    }
-}
-
-# UDPServer.java
-import java.io.*;
-import java.net.*;
-
-class UDPServer {
-    public static void main(String[] args) {
-        try (DatagramSocket serverSocket = new DatagramSocket(9876)) {
-            byte[] receiveData = new byte[1024];
-            byte[] sendData;
-
-            System.out.println("UDP Server is listening on port 9876");
-
-            while (true) {
-                // Receive data from client
-                DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-                serverSocket.receive(receivePacket);
-
-                String clientSentence = new String(receivePacket.getData(), 0, receivePacket.getLength());
-                System.out.println("Received: " + clientSentence);
-
-                // Convert client's sentence to uppercase
-                String capitalizedSentence = clientSentence.toUpperCase();
-                sendData = capitalizedSentence.getBytes();
-
-                // Send response to client
-                InetAddress clientIPAddress = receivePacket.getAddress();
-                int clientPort = receivePacket.getPort();
-                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientIPAddress, clientPort);
-                serverSocket.send(sendPacket);
-            }
-        } catch (IOException e) {
-            System.err.println("Error in UDP Server: " + e.getMessage());
-        }
-    }
-}
-        `;
-
-	// Code block for Button 8 (readymadeEnviron)
-        const text8 = `
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.cloudbus.cloudsim.*;
-
-public class ReadymadeEnvironment {
-    private static List<Cloudlet> cloudletList;
-    private static List<Vm> vmList;
-
-    public static void main(String[] args) {
-        Log.printLine("Starting ReadymadeEnvironment Simulation...");
-
-        try {
-            // Initialize CloudSim
-            int numUsers = 1;
-            Calendar calendar = Calendar.getInstance();
-            boolean traceFlag = false;
-
-            CloudSim.init(numUsers, calendar, traceFlag);
-
-            // Pre-configured Datacenter
-            Datacenter datacenter = createDatacenter("Readymade_Datacenter");
-
-            // Create Broker
-            DatacenterBroker broker = createBroker();
-            int brokerId = broker.getId();
-
-            // Create VMs using pre-configured settings
-            vmList = new ArrayList<>();
-            for (int i = 0; i < 5; i++) {
-                int vmid = i;
-                int mips = 1000;
-                long size = 10000; // Image size (MB)
-                int ram = 1024;    // VM memory (MB)
-                long bw = 1000;
-                int pesNumber = 1; // Number of processing elements
-                String vmm = "Xen";
-
-                Vm vm = new Vm(vmid, brokerId, mips, pesNumber, ram, bw, size, vmm, new CloudletSchedulerTimeShared());
-                vmList.add(vm);
-            }
-            broker.submitVmList(vmList);
-
-            // Create Cloudlets with default utilization settings
-            cloudletList = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
-                int cloudletId = i;
-                long length = 50000;
-                long fileSize = 300;
-                long outputSize = 300;
-                UtilizationModel utilizationModel = new UtilizationModelFull();
-
-                Cloudlet cloudlet = new Cloudlet(cloudletId, length, 1, fileSize, outputSize, utilizationModel, utilizationModel, utilizationModel);
-                cloudlet.setUserId(brokerId);
-                cloudletList.add(cloudlet);
-            }
-            broker.submitCloudletList(cloudletList);
-
-            // Start simulation
-            CloudSim.startSimulation();
-            List<Cloudlet> newList = broker.getCloudletReceivedList();
-            CloudSim.stopSimulation();
-
-            printCloudletList(newList);
-
-            Log.printLine("ReadymadeEnvironment Simulation Finished!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.printLine("Simulation terminated due to unexpected error.");
-        }
-    }
-
-    private static Datacenter createDatacenter(String name) {
-        List<Host> hostList = new ArrayList<>();
-
-        // Host Configuration
-        for (int i = 0; i < 3; i++) {
-            List<Pe> peList = new ArrayList<>();
-            int mips = 1000;
-            for (int j = 0; j < 4; j++) {
-                peList.add(new Pe(j, new PeProvisionerSimple(mips)));
-            }
-
-            int hostId = i;
-            int ram = 16384; // Host memory (MB)
-            long storage = 1000000; // Host storage
-            int bw = 10000;
-
-            hostList.add(new Host(hostId, new RamProvisionerSimple(ram), new BwProvisionerSimple(bw), storage, peList, new VmSchedulerTimeShared(peList)));
-        }
-
-        String arch = "x86";
-        String os = "Linux";
-        String vmm = "Xen";
-        double timeZone = 10.0;
-        double cost = 3.0;
-
-        LinkedList<Storage> storageList = new LinkedList<>();
-        DatacenterCharacteristics characteristics = new DatacenterCharacteristics(arch, os, vmm, hostList, timeZone, cost, 0.05, 0.001, 0.0);
-
-        Datacenter datacenter = null;
-        try {
-            datacenter = new Datacenter(name, characteristics, new VmAllocationPolicySimple(hostList), storageList, 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return datacenter;
-    }
-
-    private static DatacenterBroker createBroker() {
-        DatacenterBroker broker = null;
-        try {
-            broker = new DatacenterBroker("Broker");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return broker;
-    }
-
-    private static void printCloudletList(List<Cloudlet> list) {
-        Log.printLine("========== OUTPUT ==========");
-        for (Cloudlet cloudlet : list) {
-            Log.printLine("Cloudlet ID: " + cloudlet.getCloudletId() + " STATUS: " + cloudlet.getCloudletStatus());
-        }
-    }
-}
-        `;
-
-        // Function to copy text using Clipboard API
-        async function copyText(text) {
-            try {
-                await navigator.clipboard.writeText(text);
-                const messageElement = document.getElementById("copiedMsg");
-                messageElement.innerText = "Text copied successfully!";
-                messageElement.style.color = "green";
-                setTimeout(() => (messageElement.innerText = ""), 2000);
-            } catch (err) {
-                const messageElement = document.getElementById("copiedMsg");
-                messageElement.innerText = "Failed to copy text. Check your browser permissions.";
-                messageElement.style.color = "red";
-                console.error("Error copying text:", err);
-            }
+        function copyToClipboard(elementId, button) {
+            let textElement = document.getElementById(elementId);
+            navigator.clipboard.writeText(textElement.value).then(() => {
+                let originalText = button.innerText;
+                button.innerText = "Copied!";
+                setTimeout(() => {
+                    button.innerText = originalText;
+                }, 1500);
+            }).catch(err => {
+                console.error("Failed to copy: ", err);
+            });
         }
     </script>
 </body>
