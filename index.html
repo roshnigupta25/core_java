@@ -311,30 +311,58 @@ Image(graph.create_png())</textarea>
 
 <textarea id="text7" readonly>SVM Classifier:
 
-# Importing required libraries
-from sklearn import svm, datasets
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+from sklearn import svm, datasets
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 
-# Load dataset
+# Load the Iris dataset
 iris = datasets.load_iris()
-X = iris.data[:, :2]  # Taking only the first two features
-y = iris.target
+X = iris.data[:, :2]  # Taking only the first two features (sepal length & width)
+y = iris.target  # Target labels
 
 # Splitting dataset into training and test sets
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
 
-# Creating and training SVM classifier
+# Creating and training an SVM classifier with a linear kernel
 clf = svm.SVC(kernel='linear', C=1)
 clf.fit(x_train, y_train)
 
-# Making predictions
+# Making predictions on the test set
 classifier_predictions = clf.predict(x_test)
 
 # Evaluating accuracy
-print("Accuracy:", accuracy_score(y_test, classifier_predictions) * 100)
+accuracy = accuracy_score(y_test, classifier_predictions) * 100
+print(f"Accuracy: {accuracy:.2f}%")
+
+# Plotting decision boundary
+h = 0.02  # Step size in the mesh
+x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+
+# Creating a mesh grid
+xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                     np.arange(y_min, y_max, h))
+
+# Predicting for each grid point
+Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+Z = Z.reshape(xx.shape)
+
+# Plot the decision boundary
+plt.contourf(xx, yy, Z, cmap=plt.cm.coolwarm, alpha=0.3)
+plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.coolwarm, edgecolors="k")
+plt.xlabel('Sepal length')
+plt.ylabel('Sepal width')
+plt.xlim(xx.min(), xx.max())
+plt.ylim(yy.min(), yy.max())
+plt.xticks(())
+plt.yticks(())
+plt.title("SVM with Linear Kernel")
+
+# Show the plot
+plt.show()
+
 </textarea>
     <button onclick="copyToClipboard('text7', this)">SVM</button>
 
