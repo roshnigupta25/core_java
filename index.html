@@ -369,9 +369,9 @@ plt.show()
 <textarea id="text8" readonly>Admission Prediction using Logistic Regression:
 
 # Importing required libraries
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
+import numpy as np  # Linear algebra
+import pandas as pd  # Data processing, CSV file I/O
+import matplotlib.pyplot as plt  # Visualization
 
 # Loading dataset
 student_data = pd.read_csv("Admission_P1A.csv")
@@ -379,22 +379,40 @@ student_data = pd.read_csv("Admission_P1A.csv")
 # Print first ten records
 print(student_data.head(10))
 
-# Splitting dataset
+# Split dataset into features and target variable
 feature_cols = ['gre', 'gpa', 'rank']
 X = student_data[feature_cols]
-Y = student_data['admit']
+Y = student_data['admit']  # Ensure correct column access
 
+# Splitting dataset into training (70%) and test (30%) sets
 from sklearn.model_selection import train_test_split
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=1)
 
+# Model building - Logistic Regression
 from sklearn.linear_model import LogisticRegression
-clf = LogisticRegression()
+clf = LogisticRegression(solver='liblinear')  # Added solver for compatibility
+
+# Fit the model with training data
 clf.fit(X_train, Y_train)
 
+# Predicting on test dataset
 Y_pred = clf.predict(X_test)
 
+# Accuracy calculation and display
 from sklearn import metrics
-print("Accuracy:", round(metrics.accuracy_score(Y_test, Y_pred), 2) * 100, "%")
+print("Accuracy:", round(metrics.accuracy_score(Y_test, Y_pred) * 100, 2), "%")  # Fixed closing parenthesis
+
+# Prediction for new data
+new = {'gre': [260], 'gpa': [2.67], 'rank': [1]}
+sc2 = pd.DataFrame(new, columns=['gre', 'gpa', 'rank'])
+
+# Predict admission for new student data
+Y_pred_new = clf.predict(sc2)
+
+print("\nNew Data:")
+print(sc2)
+print("Prediction:", "Admitted" if Y_pred_new[0] == 1 else "Not Admitted")
+
 </textarea>
     <button onclick="copyToClipboard('text8', this)">LogisticRegression</button>
 
@@ -403,24 +421,73 @@ print("Accuracy:", round(metrics.accuracy_score(Y_test, Y_pred), 2) * 100, "%")
 # Importing necessary libraries
 import pandas as pd
 import numpy as np
-from sklearn.linear_model import LinearRegression
+from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
 from sklearn import metrics
 
 # Load dataset
 df = pd.read_csv("Admission_Predict.csv")
 
-# Data Preprocessing
-df.columns = df.columns.str.strip().str.lower().str.replace(' ', '_')
-X = df[['gre_score']]
-y = df['chance_of_admit']
+# Display basic info
+print(df.head())
+print(df.info())
+
+# Clean column names
+df.columns = (
+    df.columns
+    .str.strip()
+    .str.lower()
+    .str.replace(' ', '_', regex=True)
+    .str.replace('(', '', regex=True)
+    .str.replace(')', '', regex=True)
+)
+
+# One-hot encoding (if needed)
+df_dummies = pd.get_dummies(df, drop_first=True)
+
+# Shuffle dataset
+df_shuffled = shuffle(df_dummies, random_state=44)
+
+# Define independent (X) and dependent (y) variables
+DV = 'chance_of_admit'
+X = df_shuffled.drop(DV, axis=1)
+y = df_shuffled[DV]
+
+# Split into training and test sets (67% train, 33% test)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
 
-# Train Model
+# Check training data
+print(X_train.head())
+print(y_train.head())
+
+# Train Linear Regression Model using only 'gre_score'
 model = LinearRegression()
-model.fit(X_train, y_train)
-print("Intercept:", model.intercept_)
-print("Coefficient:", model.coef_[0])
+model.fit(X_train[['gre_score']], y_train)
+
+# Display intercept and coefficient
+intercept = model.intercept_
+coeff = model.coef_[0]  # Extract single coefficient
+
+print("\nIntercept:", round(intercept, 2))
+print("Coefficient:", round(coeff, 2))
+print(f"Chance of Admit = {intercept:.2f} + ({coeff:.2f} x GRE Score)")
+
+# Make predictions on test data
+y_pred = model.predict(X_test[['gre_score']])
+
+# Display actual vs predicted values
+df1 = pd.DataFrame({'Actual Chance of Admit': y_test, 'Predicted Chance of Admit': y_pred})
+print(df1.head())
+
+# Model evaluation
+print("\nModel Evaluation Metrics:")
+print("Mean Absolute Error:", round(metrics.mean_absolute_error(y_test, y_pred), 4))
+print("Mean Squared Error:", round(metrics.mean_squared_error(y_test, y_pred), 4))
+print("Root Mean Squared Error:", round(np.sqrt(metrics.mean_squared_error(y_test, y_pred)), 4))
+print("Mean Absolute Percentage Error:", round(metrics.mean_absolute_percentage_error(y_test, y_pred), 4))
+print("R-squared:", round(metrics.r2_score(y_test, y_pred), 4))  # Fixed R-squared metric
+
 </textarea>
     <button onclick="copyToClipboard('text9', this)">LinearRegression</button>
 
