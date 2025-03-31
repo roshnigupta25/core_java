@@ -7,30 +7,91 @@
 </head>
 <body>
     <textarea id="text1" readonly>WSL Installation and Hadoop Setup:
-    
 wsl --install or wsl --install -d ubuntu
 Username = venom, Password = venom
 sudo apt-get update
 sudo apt-get install openjdk-8-jdk
 java -version
 sudo addgroup patkar09
-sudo adduser --ingroup patkar09 venom
-su - venom
-cd ~
-wget https://downloads.apache.org/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz
-tar -xvzf hadoop-3.3.1.tar.gz
-mv hadoop-3.3.1 hadoop
-nano ~/.bashrc
-
-Add the following lines at the end:
-export HADOOP_HOME=~/hadoop
-export PATH=$PATH:$HADOOP_HOME/bin
-export PATH=$PATH:$HADOOP_HOME/sbin
+sudo adduser --ingroup patkar09 venom16
+sudo usermod -aG sudo venom16 
+su - venom16
+ssh-keygen -t rsa -P “”(Generating public/private rsa key pair.) 
+cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys 
+sudo nano /etc/sysctl.conf 
+net.ipv6.conf.all.disable_ipv6 = 1  
+net.ipv6.conf.default.disable_ipv6 = 1 
+net.ipv6.conf.lo.disable_ipv6 = 1 
 Save and exit (Ctrl + X, then Y and Enter).
+
+Now we will download Hadoop. 
+cd /usr/local 
+sudo wget https://downloads.apache.org/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz
+sudo tar xzf hadoop-3.3.1.tar.gz 
+sudo mv hadoop-3.3.1 hadoop 
+sudo chown -R venom16:patkar456 hadoop 
+nano $HOME/.bashrc 
+end of the file: #Hadoop Related Options 
+export HADOOP_HOME=/usr/local/hadoop 
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64 
+export HADOOP_INSTALL=$HADOOP_HOME 
+export HADOOP_MAPRED_HOME=$HADOOP_HOME 
+export HADOOP_COMMON_HOME=$HADOOP_HOME 
+export HADOOP_HDFS_HOME=$HADOOP_HOME 
+export YARN_HOME=$HADOOP_HOME 
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native 
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin 
+export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib” 
+Save and exit (Ctrl + X, then Y and Enter).
+
 source ~/.bashrc
-hadoop version
-start-all.sh
-jps</textarea>
+cd /usr/local/hadoop/etc/hadoop  
+
+Add the following line to hadoop-env.sh 
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64 
+Save and exit (Ctrl + X, then Y and Enter).
+
+nano hadoop-env.sh 
+sudo mkdir -p /app/hadoop/tmp 
+sudo chown venom16:patkar456 /app/hadoop/tmp 
+sudo chown venom16:patkar456 /app/hadoop/tmp 
+nano core-site.xml 
+Add the following between 
+<configuration> and </configuration> 
+<property> 
+<name>hadoop.tmp.dir</name> 
+<value>/app/hadoop/tmp</value> 
+</property> 
+<property> 
+<name>fs.default.name</name> 
+<value>hdfs://localhost:54310</value> 
+</property> 
+Save and exit (Ctrl + X, then Y and Enter).
+
+nano mapred-site.sh 
+Add the following between 
+<configuration> and </configuration> 
+<property> 
+<name>mapred.job.tracker</name> 
+<value>localhost:54311</value> 
+</property> 
+ 
+nano hdfs-site.xml 
+<property> 
+<name>dfs.replication</name> 
+<value>1</value> 
+</property> 
+
+hadoop namenode -format 
+ssh localhost 
+sudo apt-get install ssh 
+sudo service ssh restart
+ssh localhost 
+cd /usr/local/hadoop/sbin 
+start-all.sh 
+jps
+stop-all.sh 
+</textarea>
     <button onclick="copyToClipboard('text1', this)">Hadoop Setup</button>
 
     <textarea id="text2" readonly>Java & Hadoop MapReduce Setup:
@@ -186,7 +247,7 @@ quit
 pig
 pig -x local
 Employees = LOAD ‘sample.txt’ USING PigStorage(‘,’) as (id:int, firstname:chararray,salary:int, Dept:chararray);  
-Dump Employees;</textarea>
+dump Employees;</textarea>
     <button onclick="copyToClipboard('text4', this)">Pig</button>
 
 <textarea id="text5" readonly>Hive Setup & Processing:
