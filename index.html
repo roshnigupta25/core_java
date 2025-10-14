@@ -368,7 +368,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from sklearn import datasets
 
-print("03_Tanmay Gujar")
+print("04_Nisha Gupta")
 
 # Load Iris dataset
 iris = datasets.load_iris()
@@ -425,26 +425,30 @@ print(f"Solution for y: {y_sol:.4f}")
     <button onclick="copyToClipboard('text9', this)">7q1</button>
 
 <textarea id="text10" readonly>
-print("\n ABCD x 4 = DBCA")
+    
+# Problem: ABCD * 4 = DBCA
 
-# 'a' and 'd' are fixed from the problem statement
-a = 2
-d = 8
-
-# Try all possible values of b and c (0–9)
 for b in range(10):
     for c in range(10):
-        # Number ABCD
-        abcd = a*1000 + b*100 + c*10 + d
-        # Number DBCA
-        dbca = d*1000 + b*100 + c*10 + a
+        # The number ABCD is 2BC8
+        abcd = 2000 + b*100 + c*10 + 8
+
+        # The number DBCA is 8CB2
+        dbca = 8000 + c*100 + b*10 + 2
+
+        # Check the condition
         if abcd * 4 == dbca:
-            print(f"a = {a}, b = {b}, c = {c}, d = {d}")
-            print(f"Verification: {abcd} * 4 = {abcd*4}, DBCA = {dbca}")
+            print(f"a = 2")
+            print(f"b = {b}")
+            print(f"c = {c}")
+            print(f"d = 8")
+            print(f"\nVerification: {abcd} * 4 = {abcd * 4}, and dbca = {dbca}")
+            # Exit both loops after finding the solution
             break
     else:
-        continue
-    break
+        continue  # Continue outer loop if inner didn't break
+    break  # Break outer loop when solution is found
+
 
 </textarea>
     <button onclick="copyToClipboard('text10', this)">7q2</button>
@@ -466,3 +470,4 @@ for b in range(10):
     </script>
 </body>
 </html>
+
