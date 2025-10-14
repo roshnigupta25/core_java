@@ -20,13 +20,14 @@ visited = set()  # Set to keep track of visited nodes
 
 def dfs(visited, graph, node):
     if node not in visited:
-        print(node, end=" ")   # Print current node
+        print(node)   # Print current node on a new line
         visited.add(node)
         for neighbour in graph[node]:
             dfs(visited, graph, neighbour)
 
 print("Following is the Depth-First Search:")
 dfs(visited, graph, '5')
+
 
 </textarea>
     <button onclick="copyToClipboard('text1', this)">DFS</button>
@@ -92,7 +93,7 @@ else:
     moveTower(num_disks, "A", "C", "B")
 
 </textarea>
-    <button onclick="copyToClipboard('text3', this)">TOHanoi</button>
+    <button onclick="copyToClipboard('text3', this)"> 2 TOHanoi</button>
 
 <textarea id="text4" readonly>
 print("****** TIC-TAC-TOE 4x4 (3 Players) ******")
@@ -213,7 +214,7 @@ elif Game == Win:
         print("Player 3 (*) Won!")
 
 </textarea>
-    <button onclick="copyToClipboard('text4', this)">TicTac</button>
+    <button onclick="copyToClipboard('text4', this)">2b TicTac</button>
 
 <textarea id="text5" readonly>
 import pandas as pd
@@ -251,7 +252,7 @@ def train(d, t):
 print("The final hypothesis is: ", train(d, target))
 
 </textarea>
-    <button onclick="copyToClipboard('text5', this)">s-algo For Hypothesis</button>
+    <button onclick="copyToClipboard('text5', this)">3 s-algo For Hypothesis</button>
 
 <textarea id="text6" readonly>
 # Program: Random Forest Classifier on Iris Dataset
@@ -305,7 +306,7 @@ print(classification_report(test['species'], preds))
 print('The accuracy score is:', accuracy_score(test['species'], preds))
 
 </textarea>
-    <button onclick="copyToClipboard('text6', this)">decision/Random</button>
+    <button onclick="copyToClipboard('text6', this)">4 decision/Random</button>
 
 <textarea id="text7" readonly>
 import pandas as pd
@@ -359,7 +360,7 @@ plt.legend()
 plt.show()
 
 </textarea>
-    <button onclick="copyToClipboard('text7', this)">least square</button>
+    <button onclick="copyToClipboard('text7', this)">5 least square</button>
 
 <textarea id="text8" readonly>
 # Program: K-Nearest Neighbors on Iris Dataset
@@ -397,7 +398,7 @@ print(confusion_matrix(y_test, y_pred))
 print("\nAccuracy Score:", accuracy_score(y_test, y_pred))
 
 </textarea>
-    <button onclick="copyToClipboard('text8', this)">k-nearest</button>
+    <button onclick="copyToClipboard('text8', this)"> 6 k-nearest</button>
 
 <textarea id="text9" readonly>
 # rootx+y=7 rooty+x=11
@@ -422,7 +423,7 @@ print(f"Solution for x: {x_sol:.4f}")
 print(f"Solution for y: {y_sol:.4f}")
 
 </textarea>
-    <button onclick="copyToClipboard('text9', this)">7q1</button>
+    <button onclick="copyToClipboard('text9', this)">7a Rootx + y = 7 </button>
 
 <textarea id="text10" readonly>
     
@@ -451,7 +452,7 @@ for b in range(10):
 
 
 </textarea>
-    <button onclick="copyToClipboard('text10', this)">7q2</button>
+    <button onclick="copyToClipboard('text10', this)">7 b. ABCD * 4</button>
 
 
     <script>
@@ -470,4 +471,5 @@ for b in range(10):
     </script>
 </body>
 </html>
+
 
