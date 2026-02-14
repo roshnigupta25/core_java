@@ -7,454 +7,622 @@
 </head>
 <body>
     <textarea id="text1" readonly>
-graph = {
-    '5': ['3', '7'],
-    '3': ['2', '4'],
-    '7': ['8'],
-    '2': [],
-    '4': ['8'],
-    '8': []
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract LogicalOperators {
+
+    // Function to test Logical Operators
+    function testLogicalOperators(bool a, bool b)
+        public
+        pure
+        returns (
+            bool logicalAnd,
+            bool logicalOr,
+            bool logicalNotB
+        )
+    {
+        logicalAnd = a && b;   // Logical AND
+        logicalOr = a || b;    // Logical OR
+        logicalNotB = !b;      // Logical NOT of b
+
+        return (logicalAnd, logicalOr, logicalNotB);
+    }
 }
 
-visited = set()  # Set to keep track of visited nodes
-
-def dfs(visited, graph, node):
-    if node not in visited:
-        print(node)   # Print current node on a new line
-        visited.add(node)
-        for neighbour in graph[node]:
-            dfs(visited, graph, neighbour)
-
-print("Following is the Depth-First Search:")
-dfs(visited, graph, '5')
-
-
 </textarea>
-    <button onclick="copyToClipboard('text1', this)">DFS</button>
+    <button onclick="copyToClipboard('text1', this)">Crete lockchain Logical operator</button>
 
     <textarea id="text2" readonly>
-graph = {
-    '5': ['3', '7'],
-    '3': ['2', '4'],
-    '7': ['8'],
-    '2': [],
-    '4': ['8'],
-    '8': []
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract IncDec {
+
+    uint256 public number;   // State variable
+
+    // Set initial value
+    function setNumber(uint256 _num) public {
+        number = _num;
+    }
+
+    // Increment using ++ operator
+    function increment() public {
+        number++;   // same as number = number + 1
+    }
+
+    // Decrement using -- operator
+    function decrement() public {
+        require(number > 0, "Error: Number cannot be negative");
+        number--;   // same as number = number - 1
+    }
+
+    // Return current value
+    function getNumber() public view returns (uint256) {
+        return number;
+    }
 }
 
-visited = []  # List to keep track of visited nodes
-queue = []    # Initialize a queue
+</textarea>
+    <button onclick="copyToClipboard('text2', this)">Increment Derement Operator</button>
 
-def bfs(visited, graph, node):
-    visited.append(node)
-    queue.append(node)
+    <textarea id="text30" readonly>
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-    while queue:
-        m = queue.pop(0)
-        print(m, end=" ")
+contract Calculator {
 
-        for neighbour in graph[m]:
-            if neighbour not in visited:
-                visited.append(neighbour)
-                queue.append(neighbour)
+    function calculate(uint256 a, uint256 b)
+        public
+        pure
+        returns (
+            uint256 sum,
+            uint256 difference,
+            uint256 product,
+            uint256 quotient
+        )
+    {
+        sum = a + b;
+        difference = a - b;
+        product = a * b;
 
-print("Following is the Breadth-First Search:")
-bfs(visited, graph, '5')
+        require(b > 0, "Error: Division by zero is not allowed.");
+
+        quotient = a / b;
+    }
+}
+
 
 </textarea>
-    <button onclick="copyToClipboard('text2', this)">BFS</button>
+    <button onclick="copyToClipboard('text30', this)">  All the results must be clubbed together in one single method / function</button>
 
 <textarea id="text3" readonly>
-print("****** TOWER OF HANOI ******")
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
 
-def moveTower(height, fromPole, toPole, withPole):
-    if height >= 1:
-        moveTower(height - 1, fromPole, withPole, toPole)
-        moveDisk(fromPole, toPole)
-        moveTower(height - 1, withPole, toPole, fromPole)
+contract OperatorExamples {
 
-def moveDisk(fp, tp):
-    print("Moving disk from", fp, "to", tp)
+    // State variables
+    uint public numberA = 10;
+    uint public numberB = 5;
+    bool public flagA = true;
+    bool public flagB = false;
 
-# Take user input for number of disks and pegs
-num_disks = int(input("Enter the number of disks: "))
-num_pegs = int(input("Enter the number of pegs: "))
+    // A) LOGICAL OPERATORS (&&, ||, !)
+    function logicalOps()
+        public
+        view
+        returns (bool, bool, bool)
+    {
+        bool andResult = flagA && flagB;
+        bool orResult  = flagA || flagB;
+        bool notResult = !flagA;
 
-# Validate peg input
-if num_pegs < 3:
-    print("At least 3 pegs are required. Exiting.")
-else:
-    if num_pegs > 3:
-        print("\nNote: The current logic handles only 3 pegs. Extra pegs will be ignored.\n")
-    
-    print("------------------------")
-    print(f"****** For {num_disks} Disks ******")
-    print("------------------------")
-    moveTower(num_disks, "A", "C", "B")
+        return (andResult, orResult, notResult);
+    }
+
+    // B) BITWISE OPERATORS
+    function bitwiseOps()
+        public
+        view
+        returns (uint, uint, uint, uint, uint, uint)
+    {
+        uint andResult = numberA & numberB;   // Bitwise AND
+        uint orResult  = numberA | numberB;   // Bitwise OR
+        uint xorResult = numberA ^ numberB;   // Bitwise XOR
+        uint notResult = ~numberA;            // Bitwise NOT
+        uint shiftL    = numberA << 1;        // Left shift
+        uint shiftR    = numberA >> 1;        // Right shift
+
+        return (andResult, orResult, xorResult, notResult, shiftL, shiftR);
+    }
+
+    // C) ASSIGNMENT OPERATORS
+    function assignmentOps() public {
+        numberA = 10;     // assignment
+        numberA += 5;     // numberA = numberA + 5
+        numberA -= 3;     // numberA = numberA - 3
+        numberA *= 2;     // numberA = numberA * 2
+        numberA /= 4;     // numberA = numberA / 4
+    }
+
+    // D) COMPARISON OPERATORS
+    function comparisonOps()
+        public
+        view
+        returns (bool, bool, bool, bool, bool, bool)
+    {
+        bool eq  = (numberA == numberB);  // Equal
+        bool neq = (numberA != numberB);  // Not equal
+        bool gte = (numberA >= numberB);  // Greater than or equal
+        bool lte = (numberA <= numberB);  // Less than or equal
+        bool gt  = (numberA > numberB);   // Greater than
+        bool lt  = (numberA < numberB);   // Less than
+
+        return (eq, neq, gte, lte, gt, lt);
+    }
+}
+
 
 </textarea>
-    <button onclick="copyToClipboard('text3', this)"> 2 TOHanoi</button>
+    <button onclick="copyToClipboard('text3', this)"> Logical,Bitwise,Assignment,Comparison</button>
 
 <textarea id="text4" readonly>
-print("****** TIC-TAC-TOE 4x4 (3 Players) ******")
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-import os
-import time
+contract DOBOperations {
 
-board = [' '] * 17  # Using index 1–16
-player = 1
+    uint public DD;
+    uint public MM;
+    uint public YY;
 
-######### Game Status ##########
-Win = 1
-Draw = -1
-Running = 0
-Game = Running
-################################
+    uint public num1;              // DD & MM
+    uint public num2;              // YY | YY (same as YY)
 
-# Draw the 4x4 board
-def DrawBoard():
-    print(" %c | %c | %c | %c " % (board[1], board[2], board[3], board[4]))
-    print("___|___|___|___")
-    print(" %c | %c | %c | %c " % (board[5], board[6], board[7], board[8]))
-    print("___|___|___|___")
-    print(" %c | %c | %c | %c " % (board[9], board[10], board[11], board[12]))
-    print("___|___|___|___")
-    print(" %c | %c | %c | %c " % (board[13], board[14], board[15], board[16]))
-    print("   |   |   |   ")
+    uint public addition;
+    uint public additionMod;
 
+    uint public multiplication;
+    uint public multiplicationMod;
 
-# Check if a position is empty
-def CheckPosition(x):
-    return board[x] == ' '
+    // Pass your date of birth as parameters
+    constructor(uint _DD, uint _MM, uint _YY) {
 
+        DD = _DD;
+        MM = _MM;
+        YY = _YY;
 
-# Check win conditions
-def CheckWin():
-    global Game
+        // Step 1: Perform AND and OR
+        num1 = DD & MM;
+        num2 = YY | YY;
 
-    # Horizontal wins
-    for i in [1, 5, 9, 13]:
-        if board[i] == board[i + 1] == board[i + 2] == board[i + 3] != ' ':
-            Game = Win
-            return
+        // Step 2: Addition and modulus with DD
+        addition = num1 + num2;
+        additionMod = addition % DD;
 
-    # Vertical wins
-    for i in range(1, 5):
-        if board[i] == board[i + 4] == board[i + 8] == board[i + 12] != ' ':
-            Game = Win
-            return
+        // Step 3: Multiplication and modulus with MM
+        multiplication = num1 * num2;
+        multiplicationMod = multiplication % MM;
+    }
 
-    # Diagonal left-to-right
-    if board[1] == board[6] == board[11] == board[16] != ' ':
-        Game = Win
-        return
+    // Function to recompute (optional)
+    function recompute() public {
 
-    # Diagonal right-to-left
-    if board[4] == board[7] == board[10] == board[13] != ' ':
-        Game = Win
-        return
+        num1 = DD & MM;
+        num2 = YY | YY;
 
-    # Draw condition
-    if all(cell != ' ' for cell in board[1:]):
-        Game = Draw
-    else:
-        Game = Running
+        addition = num1 + num2;
+        additionMod = addition % DD;
 
-
-print("Tic-Tac-Toe Game")
-print("Player 1 [$] --- Player 2 [&] --- Player 3 [*]\n")
-print("Please Wait...")
-time.sleep(1)
-
-while Game == Running:
-    os.system('cls' if os.name == 'nt' else 'clear')
-    DrawBoard()
-
-    if player % 3 == 1:
-        print("Player 1's turn ($)")
-        Mark = '$'
-    elif player % 3 == 2:
-        print("Player 2's turn (&)")
-        Mark = '&'
-    else:
-        print("Player 3's turn (*)")
-        Mark = '*'
-
-    try:
-        choice = int(input("Enter position [1-16]: "))
-        if 1 <= choice <= 16:
-            if CheckPosition(choice):
-                board[choice] = Mark
-                player += 1
-                CheckWin()
-            else:
-                print("Position already taken. Try again.")
-                time.sleep(1)
-        else:
-            print("Invalid input. Choose between 1 and 16.")
-            time.sleep(1)
-    except ValueError:
-        print("Invalid input. Enter a number.")
-        time.sleep(1)
-
-# Final board display
-os.system('cls' if os.name == 'nt' else 'clear')
-DrawBoard()
-
-# Result
-if Game == Draw:
-    print("Game Draw!")
-elif Game == Win:
-    player -= 1
-    if player % 3 == 1:
-        print("Player 1 ($) Won!")
-    elif player % 3 == 2:
-        print("Player 2 (&) Won!")
-    else:
-        print("Player 3 (*) Won!")
+        multiplication = num1 * num2;
+        multiplicationMod = multiplication % MM;
+    }
+}
 
 </textarea>
-    <button onclick="copyToClipboard('text4', this)">2b TicTac</button>
+    <button onclick="copyToClipboard('text4', this)">DOB</button>
 
 <textarea id="text5" readonly>
-import pandas as pd
-import numpy as np
-from io import StringIO
-import io
-from google.colab import files
-uploaded = files.upload()
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
 
-data = pd.read_csv(io.BytesIO(uploaded['ML Data.csv']))
-print(data)
+contract OverloadingOperations {
 
-d = np.array(data)[:, :-1]
-print("The attributes are: ", d)
+    // ================= ADDITION =================
+    function add(uint a, uint b) public pure returns(uint) {
+        return a + b;
+    }
 
-target = np.array(data)[:, -1]
-print("The target is: ", target)
+    function add(uint a, uint b, uint c) public pure returns(uint) {
+        return a + b + c;
+    }
 
-def train(d, t):
-    specific_hypothesis = d[0].copy()  # Initialize with the first example
-    for i, val in enumerate(d):
-        # Handle potential whitespace and case variations
-        target_val = str(t[i]).strip().lower()
-        if target_val == "yes":
-            for x in range(len(specific_hypothesis)):
-                if val[x] != specific_hypothesis[x]:
-                    specific_hypothesis[x] = '?'
-        elif target_val == "yes":  # Redundant condition
-            for x in range(len(specific_hypothesis)):
-                if val[x] != specific_hypothesis[x]:
-                    specific_hypothesis[x] = '?'
+    function add(uint a, uint b, uint c, uint d) public pure returns(uint) {
+        return a + b + c + d;
+    }
 
-    return specific_hypothesis
+    // ================= SUBTRACTION =================
+    function sub(uint a, uint b) public pure returns(uint) {
+        return a - b;
+    }
 
-print("The final hypothesis is: ", train(d, target))
+    function sub(uint a, uint b, uint c) public pure returns(uint) {
+        return a - b - c;
+    }
+
+    function sub(uint a, uint b, uint c, uint d) public pure returns(uint) {
+        return a - b - c - d;
+    }
+
+    // ================= MULTIPLICATION =================
+    function mul(uint a, uint b) public pure returns(uint) {
+        return a * b;
+    }
+
+    function mul(uint a, uint b, uint c) public pure returns(uint) {
+        return a * b * c;
+    }
+
+    function mul(uint a, uint b, uint c, uint d) public pure returns(uint) {
+        return a * b * c * d;
+    }
+
+    // ================= BITWISE AND =================
+    function bitAnd(uint a, uint b) public pure returns(uint) {
+        return a & b;
+    }
+
+    function bitAnd(uint a, uint b, uint c) public pure returns(uint) {
+        return a & b & c;
+    }
+
+    function bitAnd(uint a, uint b, uint c, uint d) public pure returns(uint) {
+        return a & b & c & d;
+    }
+
+    // ================= BITWISE OR =================
+    function bitOr(uint a, uint b) public pure returns(uint) {
+        return a | b;
+    }
+
+    function bitOr(uint a, uint b, uint c) public pure returns(uint) {
+        return a | b | c;
+    }
+
+    function bitOr(uint a, uint b, uint c, uint d) public pure returns(uint) {
+        return a | b | c | d;
+    }
+
+    // ================= LOGICAL AND =================
+    function logicalAnd(bool a, bool b) public pure returns(bool) {
+        return a && b;
+    }
+
+    function logicalAnd(bool a, bool b, bool c) public pure returns(bool) {
+        return a && b && c;
+    }
+
+    function logicalAnd(bool a, bool b, bool c, bool d) public pure returns(bool) {
+        return a && b && c && d;
+    }
+
+    // ================= LOGICAL OR =================
+    function logicalOr(bool a, bool b) public pure returns(bool) {
+        return a || b;
+    }
+
+    function logicalOr(bool a, bool b, bool c) public pure returns(bool) {
+        return a || b || c;
+    }
+
+    function logicalOr(bool a, bool b, bool c, bool d) public pure returns(bool) {
+        return a || b || c || d;
+    }
+}
 
 </textarea>
-    <button onclick="copyToClipboard('text5', this)">3 s-algo For Hypothesis</button>
+    <button onclick="copyToClipboard('text5', this)">Write a solidity program for overload the function for three numbers Addition,Subtraction Multiplication,bitwise And ,bitwise OR, logical And, logical OR write a solidity program  for 2 parameter, 3 parameter and 4 parameter</button>
 
 <textarea id="text6" readonly>
-# Program: Random Forest Classifier on Iris Dataset
-from sklearn.datasets import load_iris
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
-import pandas as pd
-import numpy as np
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-print("03_Tanmay Gujar")
+contract MaxMinLogic {
 
-# Load dataset
-iris = load_iris()
-df = pd.DataFrame(iris.data, columns=iris.feature_names)
+    // Function for 2 numbers
+    function compute(uint a, uint b)
+        public
+        pure
+        returns (uint result, bool condition)
+    {
+        uint maxVal = a > b ? a : b;
+        uint minVal = a < b ? a : b;
 
-# Add target labels
-df['species'] = pd.Categorical.from_codes(iris.target, iris.target_names)
+        // Condition: max == min
+        condition = (maxVal == minVal);
 
-# Randomly assign training and testing data
-df['is_train'] = np.random.uniform(0, 1, len(df)) <= 0.75
+        if (condition) {
+            result = a ^ b;   // XOR
+        } else {
+            result = a | b;   // OR
+        }
+    }
 
-# Split dataset
-train, test = df[df['is_train'] == True], df[df['is_train'] == False]
-print('No. of observations in the training data:', len(train))
-print('No. of observations in the testing data:', len(test))
+    // Function Overloading for 3 numbers
+    function compute(uint a, uint b, uint c)
+        public
+        pure
+        returns (uint result, bool condition)
+    {
+        uint maxVal = max(a, max(b, c));
+        uint minVal = min(a, min(b, c));
 
-# Define features and target
-features = df.columns[:4]
-y = pd.factorize(train['species'])[0]
+        condition = (maxVal == minVal);
 
-# Train Random Forest model
-clf = RandomForestClassifier(n_jobs=2, random_state=0)
-clf.fit(train[features], y)
+        if (condition) {
+            result = a ^ b ^ c;   // XOR
+        } else {
+            result = a | b | c;   // OR
+        }
+    }
 
-# Make predictions
-preds = iris.target_names[clf.predict(test[features])]
+    // Helper function to find maximum
+    function max(uint x, uint y)
+        private
+        pure
+        returns (uint)
+    {
+        return x > y ? x : y;
+    }
 
-# Compare predicted and actual values
-print("\n--- Prediction Results ---")
-print("First 5 Predictions:", preds[0:5])
-print("Actual:", test['species'].head().values)
-
-# Confusion matrix and classification report
-print("\n--- Confusion Matrix ---")
-print(confusion_matrix(test['species'], preds))
-
-print("\n--- Classification Report ---")
-print(classification_report(test['species'], preds))
-
-# Accuracy score
-print('The accuracy score is:', accuracy_score(test['species'], preds))
+    // Helper function to find minimum
+    function min(uint x, uint y)
+        private
+        pure
+        returns (uint)
+    {
+        return x < y ? x : y;
+    }
+}
 
 </textarea>
-    <button onclick="copyToClipboard('text6', this)">4 decision/Random</button>
+    <button onclick="copyToClipboard('text6', this)">Write a solidity program that checks whether the maximum of 2 numbers is equal to minimum of 2 numbers in case it is true then perform XOR operation and if it is false then perform OR operation overload the function to work for three numbers and apply the same condition |(Hint for true condition consider 8 and  4 and for three numbers  consider 2,3,4 and for false condition consider 6,10 and 6,3,12 for false.</button>
 
 <textarea id="text7" readonly>
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-# Set default figure size
-plt.rcParams['figure.figsize'] = (12.0, 9.0)
+contract AddProductCheck {
 
-# Load dataset
-data = pd.read_csv(r'C:\Users\Pranita\Downloads\data.csv')  # use raw string
+    // Function for 2 numbers
+    function calculate(uint a, uint b)
+        public
+        pure
+        returns (
+            uint result,
+            bool condition,
+            uint addmodResult,
+            uint mulmodResult
+        )
+    {
+        // Check if addition equals product
+        condition = (a + b == a * b);
 
-# Extract X and Y
-X = data.iloc[:, 0]
-Y = data.iloc[:, 1]
+        if (condition) {
+            // If YES → AND operation
+            result = a & b;
+        } else {
+            // If NO → OR operation
+            result = a | b;
+        }
 
-# Scatter plot of original data
-plt.scatter(X, Y, label='Actual Data')
-plt.xlabel('X')
-plt.ylabel('Y')
-plt.title('Scatter Plot of Data')
-plt.show()
+        // Avoid modulo by 0
+        uint safeMod = result == 0 ? 1 : result;
 
-# Calculate means
-X_mean = np.mean(X)
-Y_mean = np.mean(Y)
+        // Perform addmod and mulmod
+        addmodResult = addmod(a, b, safeMod);
+        mulmodResult = mulmod(a, b, safeMod);
+    }
 
-# Calculate slope (m) and intercept (c) manually
-num = 0
-den = 0
-for i in range(len(X)):
-    num += (X[i] - X_mean) * (Y[i] - Y_mean)
-    den += (X[i] - X_mean)**2
+    // Function Overloading for 3 numbers
+    function calculate(uint a, uint b, uint c)
+        public
+        pure
+        returns (
+            uint result,
+            bool condition,
+            uint addmodResult,
+            uint mulmodResult
+        )
+    {
+        // Check if sum equals product
+        condition = (a + b + c == a * b * c);
 
-m = num / den
-c = Y_mean - m * X_mean
+        if (condition) {
+            // If YES → AND operation
+            result = a & b & c;
+        } else {
+            // If NO → OR operation
+            result = a | b | c;
+        }
 
-print("Slope (m):", m)
-print("Intercept (c):", c)
+        // Avoid modulo by 0
+        uint safeMod = result == 0 ? 1 : result;
 
-# Predicted values
-Y_pred = m * X + c
-
-# Plotting original data and regression line
-plt.scatter(X, Y, label='Actual Data')
-plt.plot(X, Y_pred, color='red', label='Regression Line')
-plt.xlabel('X')
-plt.ylabel('Y')
-plt.title('Linear Regression Fit')
-plt.legend()
-plt.show()
+        // Perform addmod and mulmod
+        addmodResult = addmod(a + b, c, safeMod);
+        mulmodResult = mulmod(a * b, c, safeMod);
+    }
+}
 
 </textarea>
-    <button onclick="copyToClipboard('text7', this)">5 least square</button>
+    <button onclick="copyToClipboard('text7', this)">Write a program in solidity to determine if addition of two numbers is equal to product of same two numbers if YES, then find AND operation of two numbers else find OR operation of two numbers & perform addmod & mulmod of the two numbers with the result.  Subsequently overload the function for three numbers. </button>
 
 <textarea id="text8" readonly>
-# Program: K-Nearest Neighbors on Iris Dataset
-from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
-from sklearn import datasets
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-print("04_Nisha Gupta")
+contract PatkarVardeCollege {
 
-# Load Iris dataset
-iris = datasets.load_iris()
-iris_data = iris.data
-iris_labels = iris.target
+    struct Student {
+        string name;
+        uint rollNumber;
+        string class;
+    }
 
-# Split dataset into train and test (80%-20%)
-x_train, x_test, y_train, y_test = train_test_split(
-    iris_data, iris_labels, test_size=0.20, random_state=42
-)
+    // Mapping to store students by roll number
+    mapping(uint => Student) public students;
 
-# Create KNN classifier with k=13
-classifier = KNeighborsClassifier(n_neighbors=13)
-classifier.fit(x_train, y_train)
+    // Array of classrooms (45 to 49)
+    uint[] public classrooms = [45, 46, 47, 48, 49];
 
-# Predict on test set
-y_pred = classifier.predict(x_test)
+    // Constructor to initialize at least 10 students
+    constructor() {
+        students[1] = Student("Alice Johnson", 1, "Class A");
+        students[2] = Student("Bob Smith", 2, "Class B");
+        students[3] = Student("Charlie Brown", 3, "Class C");
+        students[4] = Student("David Wilson", 4, "Class D");
+        students[5] = Student("Eve Davis", 5, "Class E");
+        students[6] = Student("Frank Miller", 6, "Class F");
+        students[7] = Student("Grace Lee", 7, "Class G");
+        students[8] = Student("Heidi Garcia", 8, "Class H");
+        students[9] = Student("Ivan Martinez", 9, "Class I");
+        students[10] = Student("Judy Anderson", 10, "Class J");
+    }
 
-# Evaluation
-print("\n--- Classification Report ---")
-print(classification_report(y_test, y_pred))
+    // Function to get the allocated classroom based on roll number
+    // Allocation logic:
+    // 1–5   → 45
+    // 6–10  → 46
+    // 11–15 → 47
+    // 16–20 → 48
+    // 21–25 → 49
+    function getClassroom(uint rollNumber)
+        public
+        view
+        returns (uint)
+    {
+        require(
+            rollNumber >= 1 && rollNumber <= 25,
+            "Invalid roll number: must be between 1 and 25"
+        );
 
-print("\n--- Confusion Matrix ---")
-print(confusion_matrix(y_test, y_pred))
-
-print("\nAccuracy Score:", accuracy_score(y_test, y_pred))
+        uint index = (rollNumber - 1) / 5;
+        return classrooms[index];
+    }
+}
 
 </textarea>
-    <button onclick="copyToClipboard('text8', this)"> 6 k-nearest</button>
+    <button onclick="copyToClipboard('text8', this)">Smart contract</button>
 
 <textarea id="text9" readonly>
-# rootx+y=7 rooty+x=11
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-import numpy as np
-from scipy.optimize import fsolve
+contract ArrayOperations {
 
-# Define the system of equations
-def equations(vars):
-    x, y = vars
-    eq1 = np.sqrt(x) + y - 7
-    eq2 = np.sqrt(y) + x - 11
-    return [eq1, eq2]
+    // Function to get approximate current month (1–12)
+    function getCurrentMonth() public view returns (uint256) {
 
-# Solve the system with an initial guess
-start_point = [1, 1]
-solution = fsolve(equations, start_point)
-x_sol, y_sol = solution
+        uint256 secondsInMonth = 2629743;   // Avg seconds in month
+        uint256 yearSeconds = 31536000;     // Approx seconds in year
 
-print("Question 1 Solution:")
-print(f"Solution for x: {x_sol:.4f}")
-print(f"Solution for y: {y_sol:.4f}")
+        uint256 totalSeconds = block.timestamp % yearSeconds;
+
+        uint256 month = (totalSeconds / secondsInMonth) + 1;
+
+        if (month > 12) {
+            month = 12;
+        }
+
+        return month;
+    }
+
+    // Function to perform required operations
+    function performOperations()
+        public
+        view
+        returns (uint256 modSum, uint256 modProduct)
+    {
+        // Create array of 10 numbers
+        uint256;
+
+        arr[0] = 10;
+        arr[1] = 15;
+        arr[2] = 20;
+        arr[3] = 25;
+        arr[4] = 30;
+        arr[5] = 35;
+        arr[6] = 40;
+        arr[7] = 45;
+        arr[8] = 50;
+        arr[9] = 55;
+
+        // Bitwise AND on odd indices (1,3,5,7,9)
+        uint256 andResult =
+            arr[1] &
+            arr[3] &
+            arr[5] &
+            arr[7] &
+            arr[9];
+
+        // Bitwise OR on even indices (0,2,4,6,8)
+        uint256 orResult =
+            arr[0] |
+            arr[2] |
+            arr[4] |
+            arr[6] |
+            arr[8];
+
+        // Check intermediate results
+        if (andResult == 0 || orResult == 0) {
+            revert("0 is not allowed");
+        }
+
+        // Addition & Multiplication
+        uint256 sum = andResult + orResult;
+        uint256 product = andResult * orResult;
+
+        // Get current month
+        uint256 month = getCurrentMonth();
+
+        // Mod with month
+        modSum = sum % month;
+        modProduct = product % month;
+
+        // Final zero check
+        if (modSum == 0 || modProduct == 0) {
+            revert("0 is not allowed");
+        }
+
+        return (modSum, modProduct);
+    }
+}
 
 </textarea>
-    <button onclick="copyToClipboard('text9', this)">7a Rootx + y = 7 </button>
+    <button onclick="copyToClipboard('text9', this)">Write a program in solidity to create an array of 10 number and find the AND  operation of 1,3 5,7, 9  position and ODD operation of 0,2,4,6,8 position and then perform addition and multiplication of the results and mod each one of them with the current month number.Also ensure that if any one number of any result is 0 then it should display the message 0 is not allowed.  </button>
 
 <textarea id="text10" readonly>
-    
-# Problem: ABCD * 4 = DBCA
-
-for b in range(10):
-    for c in range(10):
-        # The number ABCD is 2BC8
-        abcd = 2000 + b*100 + c*10 + 8
-
-        # The number DBCA is 8CB2
-        dbca = 8000 + c*100 + b*10 + 2
-
-        # Check the condition
-        if abcd * 4 == dbca:
-            print(f"a = 2")
-            print(f"b = {b}")
-            print(f"c = {c}")
-            print(f"d = 8")
-            print(f"\nVerification: {abcd} * 4 = {abcd * 4}, and dbca = {dbca}")
-            # Exit both loops after finding the solution
-            break
-    else:
-        continue  # Continue outer loop if inner didn't break
-    break  # Break outer loop when solution is found
-
-
+ 
 </textarea>
     <button onclick="copyToClipboard('text10', this)">7 b. ABCD * 4</button>
 
+<textarea id="text11" readonly>
+ 
+</textarea>
+    <button onclick="copyToClipboard('text11', this)">7 b. ABCD * 4</button>
 
+    <textarea id="text12" readonly>
+ 
+</textarea>
+    <button onclick="copyToClipboard('text12', this)">7 b. ABCD * 4</button>
+
+    <textarea id="text13" readonly>
+ 
+</textarea>
+    <button onclick="copyToClipboard('text13', this)">7 b. ABCD * 4</button>
+    
     <script>
         function copyToClipboard(elementId, button) {
             let textElement = document.getElementById(elementId);
@@ -471,5 +639,6 @@ for b in range(10):
     </script>
 </body>
 </html>
+
 
 
