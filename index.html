@@ -103,8 +103,8 @@ encryption. Implement a mechanism for generating
 RSA key pairs and encrypting/decrypting messages </button>
 
     <textarea id="text2" readonly>
-# Install pandas (Use only in Colab)
-!pip install pandas
+# Make sure pandas is installed:
+# pip install pandas
 
 import pandas as pd
 
@@ -127,7 +127,7 @@ def display_transactions():
     if transactions:
         df = pd.DataFrame(transactions)
         print("\nAll Transactions:")
-        display(df)
+        print(df.to_string(index=False))  # Cleaner table display
     else:
         print("No transactions found.")
 
@@ -1131,6 +1131,7 @@ ensure that if any one number of any result is 0. Then it should display the mes
     </script>
 </body>
 </html>
+
 
 
 
