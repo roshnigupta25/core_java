@@ -7,621 +7,1113 @@
 </head>
 <body>
     <textarea id="text1" readonly>
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+# Install cryptography (Use this only in Google Colab)
+!pip install cryptography
 
-contract LogicalOperators {
+from cryptography.hazmat.primitives.asymmetric import rsa, padding
+from cryptography.hazmat.primitives import serialization, hashes
+import base64
 
-    // Function to test Logical Operators
-    function testLogicalOperators(bool a, bool b)
-        public
-        pure
-        returns (
-            bool logicalAnd,
-            bool logicalOr,
-            bool logicalNotB
+
+# Function to generate RSA key pairs
+def generate_rsa_key_pair():
+    private_key = rsa.generate_private_key(
+        public_exponent=65537,
+        key_size=2048
+    )
+    public_key = private_key.public_key()
+    return private_key, public_key
+
+
+# Function to serialize keys
+def serialize_keys(private_key, public_key):
+    priv_pem = private_key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption()
+    )
+
+    pub_pem = public_key.public_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PublicFormat.SubjectPublicKeyInfo
+    )
+
+    return priv_pem, pub_pem
+
+
+# Encrypt a message using public key
+def encrypt_message(public_key, message):
+    encrypted = public_key.encrypt(
+        message.encode(),
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
         )
-    {
-        logicalAnd = a && b;   // Logical AND
-        logicalOr = a || b;    // Logical OR
-        logicalNotB = !b;      // Logical NOT of b
+    )
+    return base64.b64encode(encrypted).decode()
 
-        return (logicalAnd, logicalOr, logicalNotB);
-    }
-}
+
+# Decrypt a message using private key
+def decrypt_message(private_key, encrypted_message):
+    decrypted = private_key.decrypt(
+        base64.b64decode(encrypted_message),
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+    return decrypted.decode()
+
+
+# -------------------------------
+# Simulating two users
+# -------------------------------
+
+print("Generating RSA key pairs for Sejal and Sanskruti...")
+
+sejal_private, sejal_public = generate_rsa_key_pair()
+sanskruti_private, sanskruti_public = generate_rsa_key_pair()
+
+
+# Sejal sends a message to Sanskruti
+message_from_sejal = "Hi Sanskruti, this is Sejal. The message is secure!"
+
+print("\nOriginal message from Sejal:")
+print(message_from_sejal)
+
+
+encrypted_message = encrypt_message(sanskruti_public, message_from_sejal)
+
+print("\nEncrypted message (sent to Sanskruti):")
+print(encrypted_message)
+
+
+# Sanskruti decrypts the message
+decrypted_message = decrypt_message(sanskruti_private, encrypted_message)
+
+print("\nDecrypted message by Sanskruti:")
+print(decrypted_message)
 
 </textarea>
-    <button onclick="copyToClipboard('text1', this)">Crete lockchain Logical operator</button>
+    <button onclick="copyToClipboard('text1', this)"> Develop a secure messaging application where
+users can exchange messages securely using RSA
+encryption. Implement a mechanism for generating
+RSA key pairs and encrypting/decrypting messages </button>
 
     <textarea id="text2" readonly>
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+# Install pandas (Use only in Colab)
+!pip install pandas
 
-contract IncDec {
+import pandas as pd
 
-    uint256 public number;   // State variable
+transactions = []
 
-    // Set initial value
-    function setNumber(uint256 _num) public {
-        number = _num;
+# Function to create transaction
+def create_transaction(sender, receiver, amount, description=""):
+    transaction = {
+        "Sender": sender,
+        "Receiver": receiver,
+        "Amount": amount,
+        "Description": description
     }
+    transactions.append(transaction)
+    print("Transaction recorded successfully!")
 
-    // Increment using ++ operator
-    function increment() public {
-        number++;   // same as number = number + 1
-    }
 
-    // Decrement using -- operator
-    function decrement() public {
-        require(number > 0, "Error: Number cannot be negative");
-        number--;   // same as number = number - 1
-    }
+# Function to display transactions
+def display_transactions():
+    if transactions:
+        df = pd.DataFrame(transactions)
+        print("\nAll Transactions:")
+        display(df)
+    else:
+        print("No transactions found.")
 
-    // Return current value
-    function getNumber() public view returns (uint256) {
-        return number;
-    }
-}
 
+# -------------------------
+# Example usage
+# -------------------------
+
+create_transaction("Sejal", "Sanskruti", 150, "Payment for services")
+create_transaction("Sanskruti", "Yash", 75, "Dinner split")
+create_transaction("Yash", "Sejal", 25, "Coffee refund")
+
+display_transactions()
+        
 </textarea>
-    <button onclick="copyToClipboard('text2', this)">Increment Derement Operator</button>
+    <button onclick="copyToClipboard('text2', this)"> Allow users to create multiple transactions and
+display them in an organised format. </button>
 
     <textarea id="text30" readonly>
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
 
-contract Calculator {
-
-    function calculate(uint256 a, uint256 b)
-        public
-        pure
-        returns (
-            uint256 sum,
-            uint256 difference,
-            uint256 product,
-            uint256 quotient
-        )
-    {
-        sum = a + b;
-        difference = a - b;
-        product = a * b;
-
-        require(b > 0, "Error: Division by zero is not allowed.");
-
-        quotient = a / b;
-    }
+# Simulate user accounts with balances
+accounts = {
+    "Sejal": 500,
+    "Sanskruti": 300,
+    "Yash": 200
 }
 
 
+# Transaction class definition
+class Transaction:
+
+    def __init__(self, sender, receiver, amount):
+        self.sender = sender
+        self.receiver = receiver
+        self.amount = amount
+
+    def transfer(self):
+
+        # Check if users exist
+        if self.sender not in accounts or self.receiver not in accounts:
+            print("Either sender or receiver account doesn't exist.")
+            return
+
+        # Check for sufficient funds
+        if accounts[self.sender] < self.amount:
+            print(f"Insufficient funds in {self.sender}'s account.")
+            return
+
+        # Perform transfer
+        accounts[self.sender] -= self.amount
+        accounts[self.receiver] += self.amount
+
+        print(f"{self.amount} transferred from {self.sender} to {self.receiver}.")
+
+
+# -------------------------
+# Example usage
+# -------------------------
+
+print("Initial account balances:", accounts)
+
+# Create transactions
+t1 = Transaction("Sejal", "Sanskruti", 100)
+t1.transfer()
+
+t2 = Transaction("Sanskruti", "Yash", 50)
+t2.transfer()
+
+t3 = Transaction("Yash", "Sejal", 300)  # This should fail
+t3.transfer()
+
+print("\nFinal account balances:", accounts)
+
 </textarea>
-    <button onclick="copyToClipboard('text30', this)">  All the results must be clubbed together in one single method / function</button>
+    <button onclick="copyToClipboard('text30', this)"> Create a Python class named Transaction with
+attributes for sender, receiver, and amount.
+Implement a method within the class to transfer
+money from the sender's account to the receiver's
+account. </button>
 
 <textarea id="text3" readonly>
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+import hashlib
+import time
+import json
 
-contract OperatorExamples {
 
-    // State variables
-    uint public numberA = 10;
-    uint public numberB = 5;
-    bool public flagA = true;
-    bool public flagB = false;
+# -----------------------------
+# Block Class
+# -----------------------------
+class Block:
 
-    // A) LOGICAL OPERATORS (&&, ||, !)
-    function logicalOps()
-        public
-        view
-        returns (bool, bool, bool)
-    {
-        bool andResult = flagA && flagB;
-        bool orResult  = flagA || flagB;
-        bool notResult = !flagA;
+    def __init__(self, index, previous_hash, timestamp, data, nonce=0):
+        self.index = index
+        self.previous_hash = previous_hash
+        self.timestamp = timestamp
+        self.data = data
+        self.nonce = nonce
+        self.hash = self.calculate_hash()
 
-        return (andResult, orResult, notResult);
-    }
+    def calculate_hash(self):
+        block_string = f"{self.index}{self.previous_hash}{self.timestamp}{json.dumps(self.data)}{self.nonce}"
+        return hashlib.sha256(block_string.encode()).hexdigest()
 
-    // B) BITWISE OPERATORS
-    function bitwiseOps()
-        public
-        view
-        returns (uint, uint, uint, uint, uint, uint)
-    {
-        uint andResult = numberA & numberB;   // Bitwise AND
-        uint orResult  = numberA | numberB;   // Bitwise OR
-        uint xorResult = numberA ^ numberB;   // Bitwise XOR
-        uint notResult = ~numberA;            // Bitwise NOT
-        uint shiftL    = numberA << 1;        // Left shift
-        uint shiftR    = numberA >> 1;        // Right shift
 
-        return (andResult, orResult, xorResult, notResult, shiftL, shiftR);
-    }
+# -----------------------------
+# Blockchain Class
+# -----------------------------
+class Blockchain:
 
-    // C) ASSIGNMENT OPERATORS
-    function assignmentOps() public {
-        numberA = 10;     // assignment
-        numberA += 5;     // numberA = numberA + 5
-        numberA -= 3;     // numberA = numberA - 3
-        numberA *= 2;     // numberA = numberA * 2
-        numberA /= 4;     // numberA = numberA / 4
-    }
+    def __init__(self):
+        self.chain = [self.create_genesis_block()]
+        self.difficulty = 4  # Number of leading zeros required
 
-    // D) COMPARISON OPERATORS
-    function comparisonOps()
-        public
-        view
-        returns (bool, bool, bool, bool, bool, bool)
-    {
-        bool eq  = (numberA == numberB);  // Equal
-        bool neq = (numberA != numberB);  // Not equal
-        bool gte = (numberA >= numberB);  // Greater than or equal
-        bool lte = (numberA <= numberB);  // Less than or equal
-        bool gt  = (numberA > numberB);   // Greater than
-        bool lt  = (numberA < numberB);   // Less than
+    def create_genesis_block(self):
+        return Block(0, "0", time.time(), "Genesis Block")
 
-        return (eq, neq, gte, lte, gt, lt);
-    }
-}
+    def get_latest_block(self):
+        return self.chain[-1]
 
+    def mine_block(self, data):
+        previous_block = self.get_latest_block()
+        index = previous_block.index + 1
+        timestamp = time.time()
+        nonce = 0
+
+        print(f"\nMining block #{index}...")
+
+        new_block = Block(index, previous_block.hash, timestamp, data, nonce)
+
+        while not new_block.hash.startswith('0' * self.difficulty):
+            new_block.nonce += 1
+            new_block.hash = new_block.calculate_hash()
+
+        self.chain.append(new_block)
+
+        print(f"Block #{index} mined successfully!")
+        print(f"Hash: {new_block.hash}")
+
+    def dump_chain(self):
+        print("\nBlockchain Dump:")
+        for block in self.chain:
+            print({
+                'Index': block.index,
+                'Previous Hash': block.previous_hash,
+                'Timestamp': time.strftime('%Y-%m-%d %H:%M:%S',
+                                           time.localtime(block.timestamp)),
+                'Data': block.data,
+                'Nonce': block.nonce,
+                'Hash': block.hash
+            })
+
+
+# -----------------------------
+# Create Blockchain
+# -----------------------------
+my_blockchain = Blockchain()
+
+# Mine blocks
+my_blockchain.mine_block({"sender": "Sejal", "receiver": "Sanskruti", "amount": 50})
+my_blockchain.mine_block({"sender": "Sanskruti", "receiver": "Yash", "amount": 25})
+my_blockchain.mine_block({"sender": "Yash", "receiver": "Sejal", "amount": 10})
+
+# Display blockchain
+my_blockchain.dump_chain()
 
 </textarea>
-    <button onclick="copyToClipboard('text3', this)"> Logical,Bitwise,Assignment,Comparison</button>
+    <button onclick="copyToClipboard('text3', this)"> Implement a function to add new blocks to the
+miner and dump the blockchain. </button>
 
 <textarea id="text4" readonly>
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract DOBOperations {
+contract Demo {
 
-    uint public DD;
-    uint public MM;
-    uint public YY;
+    uint public value;   // State variable
 
-    uint public num1;              // DD & MM
-    uint public num2;              // YY | YY (same as YY)
-
-    uint public addition;
-    uint public additionMod;
-
-    uint public multiplication;
-    uint public multiplicationMod;
-
-    // Pass your date of birth as parameters
-    constructor(uint _DD, uint _MM, uint _YY) {
-
-        DD = _DD;
-        MM = _MM;
-        YY = _YY;
-
-        // Step 1: Perform AND and OR
-        num1 = DD & MM;
-        num2 = YY | YY;
-
-        // Step 2: Addition and modulus with DD
-        addition = num1 + num2;
-        additionMod = addition % DD;
-
-        // Step 3: Multiplication and modulus with MM
-        multiplication = num1 * num2;
-        multiplicationMod = multiplication % MM;
+    // Function to set value
+    function set(uint _v) public {
+        value = _v;
     }
 
-    // Function to recompute (optional)
-    function recompute() public {
-
-        num1 = DD & MM;
-        num2 = YY | YY;
-
-        addition = num1 + num2;
-        additionMod = addition % DD;
-
-        multiplication = num1 * num2;
-        multiplicationMod = multiplication % MM;
+    // Function to get value
+    function get() public view returns (uint) {
+        return value;
     }
 }
 
 </textarea>
-    <button onclick="copyToClipboard('text4', this)">DOB</button>
+    <button onclick="copyToClipboard('text4', this)">  Implement and demonstrate the use of Solidity </button>
 
 <textarea id="text5" readonly>
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
-contract OverloadingOperations {
+contract Counter {
 
-    // ================= ADDITION =================
-    function add(uint a, uint b) public pure returns(uint) {
+    int public count;
+
+    // Initialize counter with 0
+    constructor() {
+        count = 0;
+    }
+
+    // Increment the counter by 1
+    function increment() public {
+        count += 1;
+    }
+
+    // Decrement the counter by 1
+    function decrement() public {
+        count -= 1;
+    }
+
+    // Increment by a specific value
+    function incrementBy(int value) public {
+        count += value;
+    }
+
+    // Decrement by a specific value
+    function decrementBy(int value) public {
+        count -= value;
+    }
+}
+
+</textarea>
+    <button onclick="copyToClipboard('text5', this)"> Increment Decrement Counter </button>
+
+<textarea id="text6" readonly>
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity ^0.8.0;
+
+contract Calculator {
+
+    function add(uint256 a, uint256 b) public pure returns (uint256) {
         return a + b;
     }
 
-    function add(uint a, uint b, uint c) public pure returns(uint) {
-        return a + b + c;
-    }
-
-    function add(uint a, uint b, uint c, uint d) public pure returns(uint) {
-        return a + b + c + d;
-    }
-
-    // ================= SUBTRACTION =================
-    function sub(uint a, uint b) public pure returns(uint) {
+    function subtract(uint256 a, uint256 b) public pure returns (uint256) {
         return a - b;
     }
 
-    function sub(uint a, uint b, uint c) public pure returns(uint) {
-        return a - b - c;
-    }
-
-    function sub(uint a, uint b, uint c, uint d) public pure returns(uint) {
-        return a - b - c - d;
-    }
-
-    // ================= MULTIPLICATION =================
-    function mul(uint a, uint b) public pure returns(uint) {
+    function multiply(uint256 a, uint256 b) public pure returns (uint256) {
         return a * b;
     }
 
-    function mul(uint a, uint b, uint c) public pure returns(uint) {
-        return a * b * c;
+    function divide(uint256 a, uint256 b) public pure returns (uint256) {
+        require(b > 0, "Calculator: Division by zero");
+        return a / b;
     }
+}
 
-    function mul(uint a, uint b, uint c, uint d) public pure returns(uint) {
-        return a * b * c * d;
-    }
+</textarea>
+    <button onclick="copyToClipboard('text6', this)"> Calculator in Solidity  </button>
 
-    // ================= BITWISE AND =================
-    function bitAnd(uint a, uint b) public pure returns(uint) {
-        return a & b;
-    }
+<textarea id="text7" readonly>
+    //logical
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-    function bitAnd(uint a, uint b, uint c) public pure returns(uint) {
-        return a & b & c;
-    }
+contract LogicalOperators {
 
-    function bitAnd(uint a, uint b, uint c, uint d) public pure returns(uint) {
-        return a & b & c & d;
-    }
-
-    // ================= BITWISE OR =================
-    function bitOr(uint a, uint b) public pure returns(uint) {
-        return a | b;
-    }
-
-    function bitOr(uint a, uint b, uint c) public pure returns(uint) {
-        return a | b | c;
-    }
-
-    function bitOr(uint a, uint b, uint c, uint d) public pure returns(uint) {
-        return a | b | c | d;
-    }
-
-    // ================= LOGICAL AND =================
-    function logicalAnd(bool a, bool b) public pure returns(bool) {
+    // AND operator example
+    function checkAnd(bool a, bool b) public pure returns (bool) {
         return a && b;
     }
 
-    function logicalAnd(bool a, bool b, bool c) public pure returns(bool) {
-        return a && b && c;
-    }
-
-    function logicalAnd(bool a, bool b, bool c, bool d) public pure returns(bool) {
-        return a && b && c && d;
-    }
-
-    // ================= LOGICAL OR =================
-    function logicalOr(bool a, bool b) public pure returns(bool) {
+    // OR operator example
+    function checkOr(bool a, bool b) public pure returns (bool) {
         return a || b;
     }
 
-    function logicalOr(bool a, bool b, bool c) public pure returns(bool) {
-        return a || b || c;
-    }
-
-    function logicalOr(bool a, bool b, bool c, bool d) public pure returns(bool) {
-        return a || b || c || d;
+    // NOT operator example
+    function checkNot(bool a) public pure returns (bool) {
+        return !a;
     }
 }
 
-</textarea>
-    <button onclick="copyToClipboard('text5', this)">Write a solidity program for overload the function for three numbers Addition,Subtraction Multiplication,bitwise And ,bitwise OR, logical And, logical OR write a solidity program  for 2 parameter, 3 parameter and 4 parameter</button>
-
-<textarea id="text6" readonly>
+    //assignment
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract MaxMinLogic {
+contract AssignmentOperators {
 
-    // Function for 2 numbers
-    function compute(uint a, uint b)
-        public
-        pure
-        returns (uint result, bool condition)
-    {
-        uint maxVal = a > b ? a : b;
-        uint minVal = a < b ? a : b;
+    uint public value;
 
-        // Condition: max == min
-        condition = (maxVal == minVal);
-
-        if (condition) {
-            result = a ^ b;   // XOR
-        } else {
-            result = a | b;   // OR
-        }
+    // = operator (assign value)
+    function setValue(uint _v) public {
+        value = _v;   // assignment operator
     }
 
-    // Function Overloading for 3 numbers
-    function compute(uint a, uint b, uint c)
-        public
-        pure
-        returns (uint result, bool condition)
-    {
-        uint maxVal = max(a, max(b, c));
-        uint minVal = min(a, min(b, c));
-
-        condition = (maxVal == minVal);
-
-        if (condition) {
-            result = a ^ b ^ c;   // XOR
-        } else {
-            result = a | b | c;   // OR
-        }
+    // += operator
+    function addToValue(uint _v) public {
+        value += _v;  // value = value + _v
     }
 
-    // Helper function to find maximum
-    function max(uint x, uint y)
-        private
-        pure
-        returns (uint)
-    {
-        return x > y ? x : y;
+    // -= operator
+    function subtractFromValue(uint _v) public {
+        value -= _v;  // value = value - _v
     }
 
-    // Helper function to find minimum
-    function min(uint x, uint y)
-        private
-        pure
-        returns (uint)
-    {
-        return x < y ? x : y;
+    // *= operator
+    function multiplyValue(uint _v) public {
+        value *= _v;  // value = value * _v
+    }
+
+    // /= operator
+    function divideValue(uint _v) public {
+        require(_v != 0, "Division by zero not allowed");
+        value /= _v;  // value = value / _v
     }
 }
 
-</textarea>
-    <button onclick="copyToClipboard('text6', this)">Write a solidity program that checks whether the maximum of 2 numbers is equal to minimum of 2 numbers in case it is true then perform XOR operation and if it is false then perform OR operation overload the function to work for three numbers and apply the same condition |(Hint for true condition consider 8 and  4 and for three numbers  consider 2,3,4 and for false condition consider 6,10 and 6,3,12 for false.</button>
-
-<textarea id="text7" readonly>
+//bitwise
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract AddProductCheck {
+contract BitwiseOperators {
 
-    // Function for 2 numbers
-    function calculate(uint a, uint b)
-        public
-        pure
-        returns (
-            uint result,
-            bool condition,
-            uint addmodResult,
-            uint mulmodResult
-        )
-    {
-        // Check if addition equals product
-        condition = (a + b == a * b);
-
-        if (condition) {
-            // If YES → AND operation
-            result = a & b;
-        } else {
-            // If NO → OR operation
-            result = a | b;
-        }
-
-        // Avoid modulo by 0
-        uint safeMod = result == 0 ? 1 : result;
-
-        // Perform addmod and mulmod
-        addmodResult = addmod(a, b, safeMod);
-        mulmodResult = mulmod(a, b, safeMod);
+    // Bitwise AND operator
+    function bitwiseAnd(uint8 a, uint8 b) public pure returns (uint8) {
+        return a & b;
     }
 
-    // Function Overloading for 3 numbers
-    function calculate(uint a, uint b, uint c)
-        public
-        pure
-        returns (
-            uint result,
-            bool condition,
-            uint addmodResult,
-            uint mulmodResult
-        )
-    {
-        // Check if sum equals product
-        condition = (a + b + c == a * b * c);
-
-        if (condition) {
-            // If YES → AND operation
-            result = a & b & c;
-        } else {
-            // If NO → OR operation
-            result = a | b | c;
-        }
-
-        // Avoid modulo by 0
-        uint safeMod = result == 0 ? 1 : result;
-
-        // Perform addmod and mulmod
-        addmodResult = addmod(a + b, c, safeMod);
-        mulmodResult = mulmod(a * b, c, safeMod);
+    // Bitwise OR operator
+    function bitwiseOr(uint8 a, uint8 b) public pure returns (uint8) {
+        return a | b;
     }
 }
 
+//ternary
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity >=0.8.2 <0.9.0;
+
+contract TernaryDemo {
+
+    // Function to find maximum of two numbers
+    function findMax(uint a, uint b) public pure returns (uint) {
+        return (a > b) ? a : b;
+    }
+
+    // Function to check even or odd
+    function checkEvenOdd(uint x) public pure returns (string memory) {
+        return (x % 2 == 0) ? "Even" : "Odd";
+    }
+}
+
+//comparison
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract ComparisonOperators {
+
+    // Equal to (==)
+    function isEqual(uint a, uint b) public pure returns (bool) {
+        return a == b;
+    }
+
+    // Greater than or equal to (>=)
+    function isGreaterOrEqual(uint a, uint b) public pure returns (bool) {
+        return a >= b;
+    }
+
+    // Less than or equal to (<=)
+    function isLessOrEqual(uint a, uint b) public pure returns (bool) {
+        return a <= b;
+    }
+}
+    
 </textarea>
-    <button onclick="copyToClipboard('text7', this)">Write a program in solidity to determine if addition of two numbers is equal to product of same two numbers if YES, then find AND operation of two numbers else find OR operation of two numbers & perform addmod & mulmod of the two numbers with the result.  Subsequently overload the function for three numbers. </button>
+    <button onclick="copyToClipboard('text7', this)"> Operators (Logical, Assignment, Bitwise, Ternary,
+Comparison)
+ </button>
 
 <textarea id="text8" readonly>
+
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract PatkarVardeCollege {
+contract ArithmeticLogic {
 
-    struct Student {
-        string name;
-        uint rollNumber;
-        string class;
-    }
-
-    // Mapping to store students by roll number
-    mapping(uint => Student) public students;
-
-    // Array of classrooms (45 to 49)
-    uint[] public classrooms = [45, 46, 47, 48, 49];
-
-    // Constructor to initialize at least 10 students
-    constructor() {
-        students[1] = Student("Alice Johnson", 1, "Class A");
-        students[2] = Student("Bob Smith", 2, "Class B");
-        students[3] = Student("Charlie Brown", 3, "Class C");
-        students[4] = Student("David Wilson", 4, "Class D");
-        students[5] = Student("Eve Davis", 5, "Class E");
-        students[6] = Student("Frank Miller", 6, "Class F");
-        students[7] = Student("Grace Lee", 7, "Class G");
-        students[8] = Student("Heidi Garcia", 8, "Class H");
-        students[9] = Student("Ivan Martinez", 9, "Class I");
-        students[10] = Student("Judy Anderson", 10, "Class J");
-    }
-
-    // Function to get the allocated classroom based on roll number
-    // Allocation logic:
-    // 1–5   → 45
-    // 6–10  → 46
-    // 11–15 → 47
-    // 16–20 → 48
-    // 21–25 → 49
-    function getClassroom(uint rollNumber)
+    // Function for two numbers
+    function operate(uint a, uint b)
         public
-        view
-        returns (uint)
+        pure
+        returns (uint result, uint addModResult, uint mulModResult)
     {
-        require(
-            rollNumber >= 1 && rollNumber <= 25,
-            "Invalid roll number: must be between 1 and 25"
-        );
+        if (a + b == a * b) {
+            // If sum equals product → AND operation
+            result = a & b;
+            addModResult = 0;
+            mulModResult = 0;
+        } else {
+            // Else → OR operation
+            result = a | b;
 
-        uint index = (rollNumber - 1) / 5;
-        return classrooms[index];
+            // Using result as modulus
+            addModResult = addmod(a, b, result);
+            mulModResult = mulmod(a, b, result);
+        }
+    }
+
+    // Function overloading for three numbers
+    function operate(uint a, uint b, uint c)
+        public
+        pure
+        returns (uint result, uint addModResult, uint mulModResult)
+    {
+        if (a + b + c == a * b * c) {
+            // AND operation for three numbers
+            result = a & b & c;
+            addModResult = 0;
+            mulModResult = 0;
+        } else {
+            // OR operation
+            result = a | b | c;
+
+            addModResult = addmod(addmod(a, b, result), c, result);
+            mulModResult = mulmod(mulmod(a, b, result), c, result);
+        }
+    }
+}
+</textarea>
+    <button onclick="copyToClipboard('text8', this)">  Write a program in solidity to determine if addition of two numbers is equal to the product of the same
+two numbers. If yes, then find AND operation of the two numbers else find OR operation of two numbers
+and perform ADDMOD and MULMOD of the two numbers with the result.
+ </button>
+    
+<textarea id="text90" readonly>
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract FunctionOverloadingDemo {
+
+    // ---------- 2 parameters ----------
+    function calculate(int a, int b)
+        public
+        pure
+        returns (
+            int add,
+            int sub,
+            int mul,
+            int bitAnd,
+            int bitOr,
+            bool logAnd,
+            bool logOr
+        )
+    {
+        add = a + b;
+        sub = a - b;
+        mul = a * b;
+        bitAnd = a & b;
+        bitOr = a | b;
+        logAnd = (a > 0 && b > 0);
+        logOr = (a > 0 || b > 0);
+    }
+
+    // ---------- 3 parameters ----------
+    function calculate(int a, int b, int c)
+        public
+        pure
+        returns (
+            int add,
+            int sub,
+            int mul,
+            int bitAnd,
+            int bitOr,
+            bool logAnd,
+            bool logOr
+        )
+    {
+        add = a + b + c;
+        sub = a - b - c;
+        mul = a * b * c;
+        bitAnd = a & b & c;
+        bitOr = a | b | c;
+        logAnd = (a > 0 && b > 0 && c > 0);
+        logOr = (a > 0 || b > 0 || c > 0);
+    }
+
+    // ---------- 4 parameters ----------
+    function calculate(int a, int b, int c, int d)
+        public
+        pure
+        returns (
+            int add,
+            int sub,
+            int mul,
+            int bitAnd,
+            int bitOr,
+            bool logAnd,
+            bool logOr
+        )
+    {
+        add = a + b + c + d;
+        sub = a - b - c - d;
+        mul = a * b * c * d;
+        bitAnd = a & b & c & d;
+        bitOr = a | b | c | d;
+        logAnd = (a > 0 && b > 0 && c > 0 && d > 0);
+        logOr = (a > 0 || b > 0 || c > 0 || d > 0);
     }
 }
 
 </textarea>
-    <button onclick="copyToClipboard('text8', this)">Smart contract</button>
+    <button onclick="copyToClipboard('text90', this)"> Write a solidity program to overload the function using Addition, subtraction, multiplication, bitwise
+AND, bitwise OR, logical AND, logical OR, for 2 parameter, 3 parameter and 4 parameter </button>
 
+    
 <textarea id="text9" readonly>
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract ArrayOperations {
+contract AllLoopsExample {
 
-    // Function to get approximate current month (1–12)
-    function getCurrentMonth() public view returns (uint256) {
-
-        uint256 secondsInMonth = 2629743;   // Avg seconds in month
-        uint256 yearSeconds = 31536000;     // Approx seconds in year
-
-        uint256 totalSeconds = block.timestamp % yearSeconds;
-
-        uint256 month = (totalSeconds / secondsInMonth) + 1;
-
-        if (month > 12) {
-            month = 12;
+    // -----------------------------
+    // For Loop
+    // -----------------------------
+    function forLoopSum(uint n)
+        public
+        pure
+        returns (uint sum)
+    {
+        for (uint i = 1; i <= n; i++) {
+            sum += i;
         }
-
-        return month;
+        return sum;
     }
 
-    // Function to perform required operations
-    function performOperations()
+    // -----------------------------
+    // While Loop
+    // -----------------------------
+    function whileLoopSum(uint n)
         public
-        view
-        returns (uint256 modSum, uint256 modProduct)
+        pure
+        returns (uint sum)
     {
-        // Create array of 10 numbers
-        uint256;
+        uint i = 1;
 
-        arr[0] = 10;
-        arr[1] = 15;
-        arr[2] = 20;
-        arr[3] = 25;
-        arr[4] = 30;
-        arr[5] = 35;
-        arr[6] = 40;
-        arr[7] = 45;
-        arr[8] = 50;
-        arr[9] = 55;
-
-        // Bitwise AND on odd indices (1,3,5,7,9)
-        uint256 andResult =
-            arr[1] &
-            arr[3] &
-            arr[5] &
-            arr[7] &
-            arr[9];
-
-        // Bitwise OR on even indices (0,2,4,6,8)
-        uint256 orResult =
-            arr[0] |
-            arr[2] |
-            arr[4] |
-            arr[6] |
-            arr[8];
-
-        // Check intermediate results
-        if (andResult == 0 || orResult == 0) {
-            revert("0 is not allowed");
+        while (i <= n) {
+            sum += i;
+            i++;
         }
 
-        // Addition & Multiplication
-        uint256 sum = andResult + orResult;
-        uint256 product = andResult * orResult;
+        return sum;
+    }
 
-        // Get current month
-        uint256 month = getCurrentMonth();
+    // -----------------------------
+    // Do-While Loop
+    // -----------------------------
+    function doWhileCount(uint n)
+        public
+        pure
+        returns (uint count)
+    {
+        uint i = 0;
 
-        // Mod with month
-        modSum = sum % month;
-        modProduct = product % month;
+        do {
+            count++;
+            i++;
+        } while (i < n);
 
-        // Final zero check
-        if (modSum == 0 || modProduct == 0) {
-            revert("0 is not allowed");
-        }
-
-        return (modSum, modProduct);
+        return count;
     }
 }
 
 </textarea>
-    <button onclick="copyToClipboard('text9', this)">Write a program in solidity to create an array of 10 number and find the AND  operation of 1,3 5,7, 9  position and ODD operation of 0,2,4,6,8 position and then perform addition and multiplication of the results and mod each one of them with the current month number.Also ensure that if any one number of any result is 0 then it should display the message 0 is not allowed.  </button>
+    <button onclick="copyToClipboard('text9', this)">  Loops in Solidity </button>
 
 <textarea id="text10" readonly>
- 
+ // SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract PureAndViewExample {
+
+    uint public number = 10;
+
+    // -----------------------------
+    // Pure Function
+    // Does NOT read or modify state variables
+    // -----------------------------
+    function pureFunction(uint a, uint b)
+        public
+        pure
+        returns (uint)
+    {
+        return a + b;
+    }
+
+    // -----------------------------
+    // View Function
+    // Can read state variables but cannot modify them
+    // -----------------------------
+    function viewFunction()
+        public
+        view
+        returns (uint)
+    {
+        return number;
+    }
+}
 </textarea>
-    <button onclick="copyToClipboard('text10', this)">7 b. ABCD * 4</button>
+    <button onclick="copyToClipboard('text10', this)"> Implement Pure and View Function </button>
 
 <textarea id="text11" readonly>
- 
+ // SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract PatkarVardeCollege {
+
+    // Structure to store student data
+    struct Student {
+        string name;
+        uint rollNo;
+        string className;
+    }
+
+    // Array to store at least 10 students
+    Student[] public students;
+
+    // Constructor to preload student data
+    constructor() {
+        students.push(Student("Sejal", 1, "MScIT"));
+        students.push(Student("Sakshi", 2, "MScIT"));
+        students.push(Student("Bhakti", 3, "MScIT"));
+        students.push(Student("Trupti", 4, "MScIT"));
+        students.push(Student("Mansi", 5, "MScIT"));
+        students.push(Student("Isha", 6, "MScIT"));
+        students.push(Student("Sanskruti", 7, "MScIT"));
+        students.push(Student("Samruddhi", 8, "MScIT"));
+        students.push(Student("Srushti", 9, "MScIT"));
+        students.push(Student("Priya", 10, "MScIT"));
+    }
+
+    // Function to allocate classroom based on roll number
+    function allocateClassroom(uint rollNo)
+        public
+        pure
+        returns (uint classroom)
+    {
+        if (rollNo >= 1 && rollNo <= 5) {
+            return 45;
+        } 
+        else if (rollNo >= 6 && rollNo <= 10) {
+            return 46;
+        } 
+        else if (rollNo >= 11 && rollNo <= 15) {
+            return 47;
+        } 
+        else if (rollNo >= 16 && rollNo <= 20) {
+            return 48;
+        } 
+        else if (rollNo >= 21 && rollNo <= 25) {
+            return 49;
+        } 
+        else {
+            return 0; // Invalid roll number
+        }
+    }
+}
 </textarea>
-    <button onclick="copyToClipboard('text11', this)">7 b. ABCD * 4</button>
+    <button onclick="copyToClipboard('text11', this)">  Create a Smart
+Contract for Patkar Varde College  </button>
 
     <textarea id="text12" readonly>
- 
+ // SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract NumberLogic {
+
+    /**
+     * @dev Checks if a number is Even or Odd.
+     */
+    function checkEvenOdd(uint256 _n)
+        public
+        pure
+        returns (string memory)
+    {
+        if (_n % 2 == 0) {
+            return "EVEN";
+        }
+        return "ODD";
+    }
+
+    /**
+     * @dev Checks if a number is Prime or Composite.
+     */
+    function checkPrimeComposite(uint256 _n)
+        public
+        pure
+        returns (string memory)
+    {
+        if (_n <= 1) {
+            return "NEITHER";
+        }
+
+        for (uint256 i = 2; i * i <= _n; i++) {
+            if (_n % i == 0) {
+                return "COMPOSITE";
+            }
+        }
+
+        return "PRIME";
+    }
+
+    /**
+     * @dev Performs complex bitwise operation and validation
+     */
+    function complexOperation(uint256 num1, uint256 num2)
+        public
+        pure
+        returns (
+            string memory resultMessage,
+            uint256 bitwiseAnd,
+            uint256 bitwiseOr
+        )
+    {
+        uint256 product = num1 * num2;
+        uint256 leastPrime = 2;
+
+        // Perform Bitwise operations
+        bitwiseAnd = product & leastPrime;
+        bitwiseOr = product | leastPrime;
+
+        // Validate based on Bitwise OR result
+        if (bitwiseOr % 2 == 0) {
+            resultMessage = "CONGRATULATION, YOU ARE SUCCESSFUL!!!";
+        } else {
+            resultMessage = "Try again!";
+        }
+    }
+}
 </textarea>
-    <button onclick="copyToClipboard('text12', this)">7 b. ABCD * 4</button>
+    <button onclick="copyToClipboard('text12', this)"> Write a Solidity Program to find whether a number
+is EVEN or ODD and another number is PRIME or
+COMPOSITE and hence find the bitwise AND and
+bitwise OR of the result of the product of the two
+numbers with the least prime number and if the
+result is EVEN then display a message,
+"CONGRATULATION, YOU ARE
+SUCCESSFUL!!!" </button>
 
     <textarea id="text13" readonly>
+ // SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract AddCompareLogic {
+
+    function checkOperation(int a, int b)
+        public
+        pure
+        returns (int sum, int result)
+    {
+        sum = a + b;
+
+        int greater;
+        int lesser;
+
+        if (a > b) {
+            greater = a;
+            lesser = b;
+        } else {
+            greater = b;
+            lesser = a;
+        }
+
+        if (sum > a || sum > b) {
+            result = lesser * (~greater);
+        } else {
+            result = greater * (~lesser);
+        }
+    }
+}
+</textarea>
+    <button onclick="copyToClipboard('text13', this)"> Write a solidity program to determine IF addition of
+two numbers is greater than any one of the numbers
+then find the product of the lesser number and NOT
+of the greater Number ELSE find the product of the
+greater number and NOT of lesser number. </button>
+
+    <textarea id="text14" readonly>
+ // SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract BirthdateOperations {
+
+    // Enter your values here
+    uint8 public DD = 1;  // Birth date (Day)
+    uint8 public YY = 3;  // Birth year (last two digits)
+    uint8 public MM = 9;  // Birth month
+
+    // Step 1: Compute A = DD & MM
+    function computeAND() public view returns (uint8) {
+        return DD & MM;
+    }
+
+    // Step 2: Compute B = YY | YY (same number)
+    function computeOR() public view returns (uint8) {
+        return YY | YY;  // same as YY
+    }
+
+    // Step 3: Modulus of addition: (A + B) % DD
+    function modulusOfAddition() public view returns (uint8) {
+        uint8 A = DD & MM;
+        uint8 B = YY | YY;
+
+        require(DD != 0, "DD cannot be zero");
+        return (A + B) % DD;
+    }
+
+    // Step 4: Modulus of multiplication: (A * B) % MM
+    function modulusOfMultiplication() public view returns (uint8) {
+        uint8 A = DD & MM;
+        uint8 B = YY | YY;
+
+        require(MM != 0, "MM cannot be zero");
+        return (A * B) % MM;
+    }
+}
+</textarea>
+    <button onclick="copyToClipboard('text14', this)"> Write a solidity program to find modulus of Addition of
+two numbers with DD and modulus of multiplication of
+two numbers with MM where the two numbers are
+achieved by performing AND operation of DD and MM
+(from your Date of Birth) and OR operation of YY and
+YY (from your Year of Birth)
+ </button>
+
+    <textarea id="text15" readonly>
+ // SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract MaxMinLogic {
+
+    // ---------- TWO NUMBERS ----------
+    function checkOperation(uint a, uint b)
+        public
+        pure
+        returns (uint result)
+    {
+        uint max = (a > b) ? a : b;
+        uint min = (a < b) ? a : b;
+
+        if (max == min) {
+            // True → XOR
+            result = a ^ b;
+        } else {
+            // False → OR
+            result = a | b;
+        }
+    }
+
+    // ---------- THREE NUMBERS ----------
+    function checkOperation(uint a, uint b, uint c)
+        public
+        pure
+        returns (uint result)
+    {
+        uint max = a;
+        uint min = a;
+
+        if (b > max) max = b;
+        if (c > max) max = c;
+
+        if (b < min) min = b;
+        if (c < min) min = c;
+
+        if (max == min) {
+            // True → XOR
+            result = a ^ b ^ c;
+        } else {
+            // False → OR
+            result = a | b | c;
+        }
+    }
+}
+</textarea>
+    <button onclick="copyToClipboard('text15', this)">Write a solidity program that checks whether the maximum of two numbers is equal to the minimum of
+those two numbers. In case it is true, then perform XOR operation and if it is false, then perform OR
+operation. Overload the function to work for three numbers and apply the same condition.
+Hint: for true conditions consider 8 and 4. And for three numbers consider 2,3,4 and for false condition
+consider 6, 10 and 6,3,12 for false
+</button>
+
+    <textarea id="text16" readonly>
+ // SPDX-License-Identifier: GPL-3.0
+pragma solidity >=0.8.2 <0.9.0;
+
+contract ArrayExample {
+
+    // Single-dimensional uint array
+    uint[] public unitArray = [22, 10, 1, 15];
+
+    // Single-dimensional string array
+    string[] public stringArray = [
+        "apple",
+        "watermelon",
+        "papaya",
+        "kiwi",
+        "blueberry"
+    ];
+
+    // Multi-dimensional array
+    uint[][] public array20 = [
+        [10, 20, 30],
+        [90, 80, 70]
+    ];
+}
+</textarea>
+    <button onclick="copyToClipboard('text16', this)"> . To study and implement array data structures in Solidity using single-dimensional and multi-dimensional
+arrays </button>
+
+    <textarea id="text17" readonly>
+ // SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract ArrayBitwiseOperations {
+
+    // Current month number (Change according to current month)
+    uint public currentMonth = 9;   // Example: September = 9
+
+    // Array of 10 numbers
+    uint[10] public numbers = [1,2,3,4,5,6,7,8,9,10];
+
+    function performOperations()
+        public
+        view
+        returns (
+            uint andResult,
+            uint orResult,
+            uint additionResult,
+            uint multiplicationResult,
+            string memory message
+        )
+    {
+        // AND of 1st, 3rd, 5th, 7th, 9th positions
+        // (Index: 1,3,5,7,9)
+        andResult =
+            numbers[1] &
+            numbers[3] &
+            numbers[5] &
+            numbers[7] &
+            numbers[9];
+
+        // OR of 0th, 2nd, 4th, 6th, 8th positions
+        // (Index: 0,2,4,6,8)
+        orResult =
+            numbers[0] |
+            numbers[2] |
+            numbers[4] |
+            numbers[6] |
+            numbers[8];
+
+        // Check if any result is zero
+        if (andResult == 0 || orResult == 0) {
+            return (0, 0, 0, 0, "0 is not allowed");
+        }
+
+        // Perform addition and multiplication
+        additionResult = (andResult + orResult) % currentMonth;
+        multiplicationResult = (andResult * orResult) % currentMonth;
+
+        // Check if mod results become zero
+        if (additionResult == 0 || multiplicationResult == 0) {
+            return (0, 0, 0, 0, "0 is not allowed");
+        }
+
+        return (
+            andResult,
+            orResult,
+            additionResult,
+            multiplicationResult,
+            "Operation Successful"
+        );
+    }
+}
+</textarea>
+    <button onclick="copyToClipboard('text17', this)">  Write a solidity program to create an array of 10 numbers and find the AND operation of 1st, 3rd, 5th,
+7th and 9th position number and OR operation of 0th, 2nd, 4th, 6th and 8th numbers. Then perform
+addition, multiplication of the results and MOD each one of them with the current month number. Also
+ensure that if any one number of any result is 0. Then it should display the message “0 is not allowed”. </button>
+
+    <textarea id="text18" readonly>
  
 </textarea>
-    <button onclick="copyToClipboard('text13', this)">7 b. ABCD * 4</button>
+    <button onclick="copyToClipboard('text18', this)">7 b. ABCD * 4</button>
     
     <script>
         function copyToClipboard(elementId, button) {
@@ -639,6 +1131,7 @@ contract ArrayOperations {
     </script>
 </body>
 </html>
+
 
 
 
